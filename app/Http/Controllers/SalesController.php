@@ -105,7 +105,7 @@ class SalesController extends Controller
             ->where('eod_date', '<', $maxDate)
             ->groupBy('eod_date')
             ->orderBy('eod_date', 'desc')
-            ->take(3)
+            ->take(5)
             ->get();
         return view('sales.branchSales', ['totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate]);
 

@@ -44,7 +44,7 @@
               <td> 
                 <a href="/sales/{{ request('omega_id') }}/{{ $total->eod_date }}">{{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }}</a>
               </td>
-              <td> {{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }} </td>
+             
              
                 <td>{{ $total->total_amount }}</td>
               </tr>

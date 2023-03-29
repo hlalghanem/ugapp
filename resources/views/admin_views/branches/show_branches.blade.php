@@ -1,16 +1,16 @@
 @extends('layouts.main-layout')
 @section('content')
 <br>
-
+<h2>All Branches</h2>
 <table class="table" >
 <thead>
         <tr>
             <th>#</th>
             <th>
-                <a href="?sort=name">Branch Name</a>
+                <a href="?sort=name">Name</a>
             </th>
             <th>
-                <a href="?sort=is_active">Is Active</a>
+                <a href="?sort=is_active">Active</a>
             </th>
             <th>
                 <a href="?sort=last_sync">Last Sync</a>
@@ -31,7 +31,7 @@
                 @endif
             </td>
                 <td>
-                    {{\Carbon\Carbon::parse($branch->last_sync)->addHours(3)->format('d-M-y H:i') }}
+                    {{\Carbon\Carbon::parse($branch->last_sync)->format('d-M-y H:i') }}
                {{-- $branch->last_sync     Carbon::parse($branch->last_sync)->addHours(3) --}}
                 </td>
             </tr>
