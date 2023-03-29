@@ -2,7 +2,7 @@
 @section('content')
 <br>
 @if ($errors->any())
-    <div>
+    <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -10,6 +10,7 @@
         </ul>
     </div>
 @endif
+
 
 
 <form method="POST" action="{{ route('branches.store') }}">
