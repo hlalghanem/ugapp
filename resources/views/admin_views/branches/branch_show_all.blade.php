@@ -2,6 +2,7 @@
 @section('content')
 <br>
 <h2>All Branches</h2>
+<a href="/branch/new">create a new branch</a>
 <table class="table" >
 <thead>
         <tr>

@@ -23,72 +23,39 @@ class BranchesController extends Controller
         $sort = $request->query('sort', 'last_sync');
         $branches = Branch::orderByDesc($sort)->get();
 
-        return view('admin_views.branches.show_branches', ['branches' => $branches]);
+        return view('admin_views.branches.branch_show_all', ['branches' => $branches]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+     public function create()
     {
-        //
+        return view('admin_views.branches.branch_new');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+  
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|min:3',
+            'omega_id' => 'required|integer|digits:6',
+        ]);
+    
+        $branch = new Branch();
+        $branch->name = $request->input('name');
+        $branch->omega_id = $request->input('omega_id');
+        $branch->save();
+
+        return redirect()->route('branches.index')->with('success', 'Branch created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Branch $branch)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit(Branch $branch)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Branch $branch)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Branch $branch)
-    {
-        //
-    }
 }

@@ -27,6 +27,9 @@ Route::get('/sales/{omega_id}/{eod_date}', [SalesController::class, 'showBranchS
 
 // Branch Routes
 Route::get('/branch/all', [BranchesController::class, 'get_all_branches'])->middleware(['auth', 'verified'])->name('get_all_branches');
+Route::get('/branch/new', [BranchesController::class, 'create'])->middleware(['auth', 'verified'])->name('branches.create');
+Route::post('/branch/store', [BranchesController::class, 'store'])->middleware(['auth', 'verified'])->name('branches.store');
+
 
 
 
