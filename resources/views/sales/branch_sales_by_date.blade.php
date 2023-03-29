@@ -1,8 +1,19 @@
 @extends('layouts.main-layout')
 @section('content')
-
+<br>
 <div class="container">
-    <br>
+@if (is_null($brTodayTotal))
+<div class="text-center">
+    no transactions
+
+    <br/>
+    <a href="/sales/{{ request('omega_id') }}" class="btn btn-outline-secondary"> Back</a>
+</div>
+    <p></p>
+@else
+ 
+   
+  
     <h2>{{ $brTodayTotal->cust_name }}</h2>
     
     <br>
@@ -34,29 +45,12 @@
     </table>
   </div>
 <br>
-<h3><span class="badge text-bg-warning">Last 5 days</span></h3>
-  <div class="table-responsive">
-    <table class="table">
-        
-          <tbody>
-            @foreach ($totalsbyDate as $total)
-            <tr>
-              <td> 
-                <a href="/sales/{{ request('omega_id') }}/{{ $total->eod_date }}">{{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }}</a>
-              </td>
-              <td> {{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }} </td>
-             
-                <td>{{ $total->total_amount }}</td>
-              </tr>
-       @endforeach
-          </tbody>
-         
-    </table>
+<a href="/sales/{{ request('omega_id') }}" class="btn btn-outline-secondary"> Back</a>
 
-    {{-- <input type="date" name="date" class="form-control"> --}}
 
-  </div>
-
+   
+@endif
+   
   </div>
 
   @endsection
