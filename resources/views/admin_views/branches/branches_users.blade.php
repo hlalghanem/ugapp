@@ -21,53 +21,58 @@
         {{ session('success') }}
     </div>
 @endif
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-<h2>All Branches</h2>
-<a href="/branch/new" class="btn btn-outline-info m-2">New Branch</a>
+
+<h2>All Branches & Users</h2>
+
 
 <div class="text-box-container">
 <input type="text"  class="rounded-input" id="searchInput" placeholder="Search...">
 </div>
+<br>
+<form method="POST" action="{{ route('assign.branchUser') }}">
+    @csrf
+    <div>
+        <label  class="form-label" for="user_id">Select User:</label>
+        <select class="btn btn-outline-info m-2" name="user_id" id="user_id">
+            @foreach ($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+            @endforeach
+        </select>
+   
+        <label  class="form-label" for="role_id">Select Role:</label>
+        <select class="btn btn-outline-info m-2" name="role_id" id="role_id">
+            @foreach ($branches as $branch)
+                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+            @endforeach
+        </select>
+    
+    <button type="submit" class="btn btn-outline-info m-2">Assign user</button>
+    
+    </div>
+</form>
 
-
-
+<br>
 <table class="table" >
-<thead>
-        <tr>
-            <th>#</th>
-            <th>
-                <a href="?sort=name">Name</a>
-            </th>
-            <th>
-               Active
-            </th>
-            <th>
-                <a href="?sort=last_sync">Last Sync</a>
-            </th>
-            <th>
-              
-            </th>
-        </tr>
-    </thead> 
+
     <tbody>
-        <?php $counter = 1; ?>
-        @foreach($branches as $branch)
+        
+        @foreach($branches_users as $branch)
             <tr>
-                <td>{{ $counter++ }}</td>
-                <td>{{ $branch->name }}</td>
-                <td>
-                @if ($branch->is_active===1)
-                <i class="bi bi-check-circle-fill text-success"></i>
-                @else
-                <i class="bi bi-x-circle-fill text-danger"></i>
-                @endif
-            </td>
-                <td>
-                    {{\Carbon\Carbon::parse($branch->last_sync)->format('d-M-y H:i') }}
-                </td>
-                <td>
-                   <a href="/branch/{{$branch->id }}/edit">edit</a>
-                </td>
+                
+                <td>{{ $branch->branch_name }}</td>
+                <td>{{ $branch->branch_omega_id }}</td>
+                <td><b>{{ $branch->name }}</b> <i> {{ $branch->email }}</i></td>
+                
             </tr>
         @endforeach
     </tbody>
