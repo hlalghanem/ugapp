@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 
 class Branch_Users_Controller extends Controller
@@ -32,6 +33,33 @@ class Branch_Users_Controller extends Controller
     }
     public function assign_branch_User(Request $request)
     {
-        return redirect()->route('branches.users')->with('success', 'Branch assighned to user successfully!');
+        if (!$this->isAdmin()) {
+            return redirect()->route('logout');
+        }
+       $checkif = DB::table('branch_user')
+       ->where('user_id','=', $request->user_id)
+       ->where('branch_id','=',$request->branch_id)
+       ->get();
+       if (count($checkif) > 0)
+       {
+        return redirect()->back()->withErrors('Branch already assigned to this user!');
+       }
+        $branch =Branch::find($request->branch_id);
+        $user_id= $request->user_id;
+        $branch->users()->attach( $user_id);
+
+
+        return redirect()->route('branches.users')->with('success', 'Branch assigned to user successfully!');
+    }
+
+    public function delete_branch_User($user_id,$branch_id)
+    {
+        if (!$this->isAdmin()) {
+            return redirect()->route('logout');
+        }
+        $branch =Branch::find($branch_id);
+        $branch->users()->detach( $user_id);
+
+        return redirect()->route('branches.users')->with('success', 'Branch unassigned successfully!');
     }
 }

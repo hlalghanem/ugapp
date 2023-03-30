@@ -28,7 +28,7 @@
                   </a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/branch/all">All</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="/branch/users">Branch Users</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                   </ul>

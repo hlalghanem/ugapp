@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Validator;
 class BranchesController extends Controller
 {
 
-   
+    private function isAdmin()
+    {
+        return auth()->check() && auth()->user()->group_id == 2;
+    }
 
     public function get_all_branches(Request $request)
     {

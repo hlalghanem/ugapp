@@ -39,6 +39,7 @@ Route::put('/branch/{id}/update', [BranchesController::class, 'update'])->middle
 Route::get('/branch/users', [Branch_Users_Controller::class, 'get_all_branches_users'])->middleware(['auth', 'verified'])->name('branches.users');
 Route::post('/branchuser/store', [Branch_Users_Controller::class, 'assign_branch_User'])->middleware(['auth', 'verified'])->name('assign.branchUser');
 
+Route::delete('/branchuser/delete/{user_id}/{branch_id}', [Branch_Users_Controller::class, 'delete_branch_User'])->middleware(['auth', 'verified'])->name('delete.branchUser');
 
 
 
@@ -54,10 +55,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-Route::get('logout', function ()
-{
+Route::get('logout', function () {
     auth()->logout();
     Session()->flush();
 
-    return Redirect::to('/');
+    return redirect('/');
+
 })->name('logout');
