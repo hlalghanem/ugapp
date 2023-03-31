@@ -9,7 +9,9 @@
 
 
 {{-- this working fine --}}
-<br>
+
+<a href="/" class="btn btn-outline-dark form-control"> <i class="bi bi-arrow-clockwise"></i></a>
+<br><br>
 @foreach ($transactions as $transaction)
 <div class="card">
     <div class="card-header">

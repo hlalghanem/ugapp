@@ -35,9 +35,7 @@
 <h2>All Branches & Users</h2>
 
 
-<div class="text-box-container">
-    <input type="text" class="rounded-input" id="searchInput" placeholder="Search...">
-</div>
+
 <br>
 <form method="POST" action="{{ route('assign.branchUser') }}">
     @csrf
@@ -60,8 +58,11 @@
 
     </div>
 </form>
-
+<div class="text-box-container">
+    <input type="text" class="rounded-input" id="searchInput" placeholder="Search...">
+</div>
 <br>
+
 <table class="table">
 
     <tbody>

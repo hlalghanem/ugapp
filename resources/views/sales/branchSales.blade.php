@@ -6,7 +6,10 @@
     <h2>{{ $brTodayTotal->cust_name }}</h2>
     
     <br>
-    <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($brTodayTotal->eod_date)->format('D j M') }} </span> </h3>
+    <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($brTodayTotal->eod_date)->format('D j M') }} </span> 
+    <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-house-door"></i></a>
+  
+  </h3>
    
 <div class="table-responsive">
     <table class="table">
@@ -21,14 +24,14 @@
             @foreach ($totals as $total)
             <tr>
                 <td>{{ $total->payment_type }}</td>
-                <td>{{ $total->total_amount }}</td>
+                <td>KD {{ $total->total_amount }}</td>
               </tr>
        @endforeach
           </tbody>
           <tfoot>
             <tr>
-                <td><b>Total KWD</b></td>
-                <td><b>{{ $brTodayTotal->total_amount }}</b></td>
+                <td><b>Total</b></td>
+                <td><b>KD {{ $brTodayTotal->total_amount }}</b></td>
               </tr>
           </tfoot>
     </table>
@@ -46,7 +49,7 @@
               </td>
              
              
-                <td>{{ $total->total_amount }}</td>
+                <td>KD {{ $total->total_amount }}</td>
               </tr>
        @endforeach
           </tbody>

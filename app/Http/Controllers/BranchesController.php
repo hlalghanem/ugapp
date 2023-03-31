@@ -81,7 +81,7 @@ class BranchesController extends Controller
             return redirect()->route('logout');
         }
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:branches',
+            'name' => 'required',
             // 'omega_id' => 'required|integer|digits:6|unique:branches',
         ]);
 

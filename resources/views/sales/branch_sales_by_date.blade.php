@@ -32,14 +32,14 @@
             @foreach ($totals as $total)
             <tr>
                 <td>{{ $total->payment_type }}</td>
-                <td>{{ $total->total_amount }}</td>
+                <td>KD {{ $total->total_amount }}</td>
               </tr>
        @endforeach
           </tbody>
           <tfoot>
             <tr>
-                <td><b>Total KWD</b></td>
-                <td><b>{{ $brTodayTotal->total_amount }}</b></td>
+                <td><b>Total</b></td>
+                <td><b>KD {{ $brTodayTotal->total_amount }}</b></td>
               </tr>
           </tfoot>
     </table>
@@ -52,5 +52,6 @@
 @endif
    
   </div>
+  <br><br>
 
   @endsection
