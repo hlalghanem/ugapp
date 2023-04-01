@@ -56,8 +56,47 @@
          
     </table>
 
-    {{-- <input type="date" name="date" class="form-control"> --}}
+    <label for="date">Select a date:</label>
+<select id="date" name="date" class="form-select">
+    @foreach ($totalsbyDate as $date)
+        <option value="{{ $date->eod_date }}" class="form-option">{{ $date->eod_date }}</option>
+    @endforeach
+</select>
+<button onclick="goToDate()" class="btn btn-primary">Go</button>
+<script>
+    function goToDate() {
+        var dateSelect = document.getElementById("date");
+        var selectedDate = dateSelect.options[dateSelect.selectedIndex].value;
+        window.location.href = "/sales/{{ request('omega_id') }}/" + selectedDate;
+    }
+</script>
 
+<style>
+    .form-select {
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        line-height: 1.5;
+        width: 100%;
+        max-width: 20rem;
+        background-color: #fff;
+        background-clip: padding-box;
+    }
+    
+    .form-option {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
+</style>
+
+<br><br>
   </div>
 
   </div>
