@@ -10,8 +10,8 @@
 
 {{-- this working fine --}}
 
-<a href="/" class="btn btn-outline-dark form-control"> <i class="bi bi-arrow-clockwise"></i></a>
-<br><br>
+<a href="/" class="btn form-control"> <i class="bi bi-arrow-clockwise"></i></a>
+<br>
 @foreach ($transactions as $transaction)
 <div class="card">
     <div class="card-header">
@@ -36,7 +36,7 @@
         </td>
            </div>
         <div class="col-4 ">
-            KD<b> {{ $transaction->{'SUM(amount_paid)'} }}</b>
+            KD<b> <a class="text-decoration-none text-dark" href="/sales/{{ $transaction->omega_id }}"> {{ $transaction->{'SUM(amount_paid)'} }}</a></b>
         </div>
       </div>
     </div>
