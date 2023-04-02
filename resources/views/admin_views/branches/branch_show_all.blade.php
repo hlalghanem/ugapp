@@ -38,9 +38,7 @@
             <th>
                 <a href="?sort=name">Name</a>
             </th>
-            <th>
-                Active
-            </th>
+            
             <th>
                 <a href="?sort=last_sync">Last Sync</a>
             </th>
@@ -55,23 +53,22 @@
         <tr>
             <td>{{ $counter++ }}</td>
             <td>{{ $branch->name }}</td>
-            <td>
-                @if ($branch->is_active===1)
-                <i class="bi bi-check-circle-fill text-success"></i>
-                @else
-                <i class="bi bi-x-circle-fill text-danger"></i>
-                @endif
-                @if (strtotime($branch->last_sync) < strtotime('-30 minutes')) 
-                <span class="badge text-bg-danger">Offline</span>
-                
-                @else 
-                <span class="badge text-bg-success">Online</span>
-                @endif 
-            </td>
+           
             <td>
                 {{\Carbon\Carbon::parse($branch->last_sync)->format('d-M H:i') }}
                 </td>
             <td>
+            @if ($branch->is_active===1)
+                <i class="bi bi-check-circle-fill text-success" title="Active"></i>
+                @else
+                <i class="bi bi-x-circle-fill text-danger" title="inActive"></i>
+                @endif
+                @if (strtotime($branch->last_sync) < strtotime('-30 minutes')) 
+               
+                <i class="bi bi-dash-circle-fill  text-danger" title="offline"></i>
+                @else 
+                <i class="bi bi-circle-fill text-success" title="online"></i>
+                @endif 
                 <a href="/branch/{{$branch->id }}/edit"><i class="bi bi-pencil-square"></i></a>
             </td>
         </tr>

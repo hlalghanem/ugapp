@@ -86,6 +86,9 @@ class SalesController extends Controller
         $maxDate = DB::table('transactions')
             ->where('omega_id', $omega_id)
             ->max('eod_date');
+            if  (is_null($maxDate)) {
+                abort(404, 'no transaction for selected branch #19202');
+            }
 
         $brTodayTotal = Transaction::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
@@ -107,7 +110,17 @@ class SalesController extends Controller
             ->orderBy('eod_date', 'desc')
             ->take(5)
             ->get();
-        return view('sales.branchSales', ['totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate]);
+
+            $prevSales = Transaction::selectRaw('eod_date')
+            ->where('omega_id', '=', $omega_id)
+            
+            ->groupBy('eod_date')
+            ->orderBy('eod_date', 'desc')
+            ->skip(5)->take(30)->get();
+
+           // dd( $prevSales );
+
+        return view('sales.branchSales', ['totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
 
     }
 

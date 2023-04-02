@@ -1,14 +1,5 @@
 @extends('layouts.main-layout')
 @section('content')
-
-
-
-{{-- Updated --}}
-
-
-
-
-{{-- this working fine --}}
 <div class="text-center m-1">
 <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-arrow-clockwise"></i></a>
 </div>
@@ -41,9 +32,7 @@
         </div>
       </div>
     </div>
-    {{-- <div class="card-body">
-       
-    </div>  --}}
+   
 </div>
 <br>
 

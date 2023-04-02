@@ -22,6 +22,7 @@ class BranchesController extends Controller
             // User is not authenticated or is not Admin
             return redirect()->route('logout');
         }
+        
 
         $sort = $request->query('sort', 'last_sync');
         $branches = Branch::orderByDesc($sort)->get();

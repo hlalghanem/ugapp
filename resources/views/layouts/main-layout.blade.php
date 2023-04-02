@@ -36,6 +36,16 @@
                 
                  @endif
                @endauth
+
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Reports
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/reports/salesbydate">Sales by Date</a></li>
+                   
+                  </ul>
+                </li>
               
               
               @if (1>2)

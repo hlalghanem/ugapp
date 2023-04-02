@@ -4,24 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\Branch_Users_Controller;
-
-
+use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-Route::get('/', function () {
-    return view('sales.sales');
-});
-
-*/
 
 // Sales Routes
 Route::get('/', [SalesController::class, 'get_today_sales'])->middleware(['auth', 'verified'])->name('get_today_sales');
@@ -38,8 +22,10 @@ Route::put('/branch/{id}/update', [BranchesController::class, 'update'])->middle
 // Branch Users Routes
 Route::get('/branch/users', [Branch_Users_Controller::class, 'get_all_branches_users'])->middleware(['auth', 'verified'])->name('branches.users');
 Route::post('/branchuser/store', [Branch_Users_Controller::class, 'assign_branch_User'])->middleware(['auth', 'verified'])->name('assign.branchUser');
-
 Route::delete('/branchuser/delete/{user_id}/{branch_id}', [Branch_Users_Controller::class, 'delete_branch_User'])->middleware(['auth', 'verified'])->name('delete.branchUser');
+
+// Reports Routes
+Route::get('/reports/salesbydate', [ReportsController::class, 'sales_report_by_date'])->middleware(['auth', 'verified'])->name('reports.bydate');
 
 
 
