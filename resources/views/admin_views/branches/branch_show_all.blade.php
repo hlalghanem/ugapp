@@ -43,6 +43,9 @@
                 <a href="?sort=last_sync">Last Sync</a>
             </th>
             <th>
+                <a href="?sort=last_transaction">Last trans</a>
+            </th>
+            <th>
 
             </th>
         </tr>
@@ -57,6 +60,9 @@
             <td>
                 {{\Carbon\Carbon::parse($branch->last_sync)->format('d-M H:i') }}
                 </td>
+                <td>
+                    {{\Carbon\Carbon::parse($branch->last_transaction)->format('d-M H:i') }}
+                    </td>
             <td>
             @if ($branch->is_active===1)
                 <i class="bi bi-check-circle-fill text-success" title="Active"></i>
