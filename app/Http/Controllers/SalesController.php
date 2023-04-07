@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\Transaction;
+use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,6 +50,7 @@ class SalesController extends Controller
                     ->whereRaw('transactions.cust_name = a.cust_name');
             })
             ->groupBy('cust_name', 'omega_id', 'eod_date')
+            ->orderBy('eod_date', 'desc')
             ->orderBy('SUM(amount_paid)', 'desc')
             ->get();
         // dd($transactions);
@@ -96,22 +98,26 @@ class SalesController extends Controller
             ->groupBy('cust_name', 'eod_date')
             ->first();
 
+            $branchinfo =Branch::where('omega_id', '=', $omega_id)->first();
+         
+
         $totals = Transaction::selectRaw('payment_type, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             ->where('eod_date', '=', $maxDate)
             ->groupBy('payment_type')
+            
             ->orderBy('total_amount', 'desc')
             ->get();
 
-        $totalsbyDate = Transaction::selectRaw('eod_date, SUM(amount_paid) as total_amount')
+        $totalsbyDate = Payment::selectRaw('eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
-            ->where('eod_date', '<', $maxDate)
+            // ->where('eod_date', '<', $maxDate)
             ->groupBy('eod_date')
             ->orderBy('eod_date', 'desc')
             ->take(5)
             ->get();
 
-            $prevSales = Transaction::selectRaw('eod_date')
+            $prevSales = Payment::selectRaw('eod_date')
             ->where('omega_id', '=', $omega_id)
             
             ->groupBy('eod_date')
@@ -119,8 +125,9 @@ class SalesController extends Controller
             ->skip(5)->take(30)->get();
 
            // dd( $prevSales );
+           
 
-        return view('sales.branchSales', ['totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
+        return view('sales.branchSales', ['branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
 
     }
 
@@ -150,7 +157,7 @@ class SalesController extends Controller
         }
 
 
-        $brTodayTotal = Transaction::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')
+        $brTodayTotal = Payment::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             ->where('eod_date', '=', $eod_date)
             ->groupBy('cust_name', 'eod_date')
@@ -163,14 +170,15 @@ class SalesController extends Controller
 
 
 
-        $totals = Transaction::selectRaw('payment_type, SUM(amount_paid) as total_amount')
+        $totals = Payment::selectRaw('payment_type, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             ->where('eod_date', '=', $eod_date)
             ->groupBy('payment_type')
+           
             ->orderBy('total_amount', 'desc')
             ->get();
 
-        $totalsbyDate = Transaction::selectRaw('eod_date, SUM(amount_paid) as total_amount')
+        $totalsbyDate = Payment::selectRaw('eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             ->where('eod_date', '<', $eod_date)
             ->groupBy('eod_date')

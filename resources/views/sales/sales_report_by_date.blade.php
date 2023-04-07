@@ -25,7 +25,7 @@
           <label for="end_date" class="form-label">End Date</label>
           <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date ?? date('Y-m-d') }}">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-outline-secondary">Show</button>
       </form>
     </div>
 

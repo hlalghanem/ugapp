@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Branch;
-use App\Models\Transaction;
+use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +29,7 @@ class ReportsController extends Controller
        $branch= $request->input('branch');
         if($branch=="all")
         {
-            $totals = Transaction::selectRaw('payment_type, SUM(amount_paid) as total_amount')
+            $totals = Payment::selectRaw('payment_type, SUM(amount_paid) as total_amount')
             ->whereIn('branch_id', $user_active_branches)
             ->whereBetween('eod_date', [$start_date, $end_date])
             ->groupBy('payment_type')
@@ -39,7 +39,7 @@ class ReportsController extends Controller
         }
         else
         {
-            $totals = Transaction::selectRaw('payment_type, SUM(amount_paid) as total_amount')
+            $totals = Payment::selectRaw('payment_type, SUM(amount_paid) as total_amount')
             ->where('branch_id', '=', $branch)
             ->whereBetween('eod_date', [$start_date, $end_date])
             ->groupBy('payment_type')

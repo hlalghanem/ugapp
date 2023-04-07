@@ -4,10 +4,11 @@
 <div class="container">
   <br>
   <h2>{{ $brTodayTotal->cust_name }}</h2>
-
-  <br>
+<p>L.Sync. {{ \Carbon\Carbon::parse($branchinfo->last_sync)->format('jM H:i ')}}
+ L.Tran. {{ \Carbon\Carbon::parse($branchinfo->last_transaction)->format('jM H:i')}}</p>
+  
   <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($brTodayTotal->eod_date)->format('D j M') }} </span>
-    <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-house-door"></i></a>
+   
 
   </h3>
 
@@ -36,7 +37,7 @@
       </tfoot>
     </table>
   </div>
-  <br>
+
   @if(count($totalsbyDate)>0)
   <h3><span class="badge text-bg-warning">Last 5 days</span></h3>
   <div class="table-responsive">
@@ -57,7 +58,7 @@
 
     </table>
     @endif
-    @if(count($prevSales)>1)
+    @if(count($prevSales)>0)
 
     <label for="date">Select a date:</label>
     <select id="date" name="date" class="form-select">
@@ -100,7 +101,9 @@
     </style>
     
     @endif
-    <br><br>
+    <br>
+    <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-house-door">Back</i></a>
+    <br>
   </div>
 
 </div>
