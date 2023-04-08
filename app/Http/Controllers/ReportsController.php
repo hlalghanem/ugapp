@@ -49,4 +49,33 @@ class ReportsController extends Controller
 
     return view('sales.sales_report_by_date', ['branches' => $branches,'totals' => $totals, 'start_date' => $start_date ,'end_date' => $end_date , 'branch' => $branch]);
    }
+   public function sales_report_summary(Request $request){
+    $user = Auth::user(); // get the authenticated user
+    $user_id = $user->id;
+   
+    $user_active_branches = DB::table('branch_user')
+        ->where('user_id', $user_id)
+        ->where('is_active', 1)
+        ->pluck('branch_id');
+
+        $branches = DB::table('branches')
+        ->whereIn('id', $user_active_branches)
+        ->where('is_active', 1)
+        ->get();
+
+       $start_date= $request->input('start_date');
+       $end_date= $request->input('end_date');
+      
+            $totals = Payment::selectRaw('cust_name, SUM(amount_paid) as total_amount')
+            ->whereIn('branch_id', $user_active_branches)
+            ->whereBetween('eod_date', [$start_date, $end_date])
+            ->groupBy('cust_name')
+            ->orderBy('total_amount', 'desc')
+            ->get();
+
+        
+
+    return view('sales.sales_report_summary', ['totals' => $totals, 'start_date' => $start_date ,'end_date' => $end_date]);
+   }
+
 }

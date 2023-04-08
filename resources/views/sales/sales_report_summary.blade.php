@@ -2,18 +2,10 @@
 @section('content')
 <div class="container mt-5">
   <div class="row">
-  <h3>Sales by Payment </h3><hr>
+    <h3>Sales Summary </h3><hr>
     <div class="col-md-6">
-      <form method="GET" action="{{ route('reports.bydate') }}">
-        <div class="mb-3">
-          <label for="branch" class="form-label">Select branch:</label>
-          <select class="form-control" id="branch" name="branch">
-            <option value="all" {{ ($branch ?? '') == 'all' ? 'selected' : '' }}>All Branches</option>
-            @foreach($branches as $branchOption)
-            <option value="{{ $branchOption->id }}" {{ ($branch ?? '') == $branchOption->id ? 'selected' : '' }}>{{ $branchOption->name }}</option>
-            @endforeach
-          </select>
-        </div>
+      <form method="GET" action="{{ route('reports.salessummary') }}">
+        
         <div class="mb-3">
           <label for="start_date" class="form-label">Start Date</label>
 
@@ -39,7 +31,7 @@
     <thead>
       <tr>
 
-        <th scope="col">Payment</th>
+        <th scope="col">Branch</th>
         <th scope="col">Total</th>
       </tr>
     </thead>
@@ -49,7 +41,7 @@
       @endphp
       @foreach ($totals as $total)
       <tr>
-        <td>{{ $total->payment_type }}</td>
+        <td>{{ $total->cust_name }}</td>
         <td>KD {{ $total->total_amount }}</td>
         @php
     $grand_total += $total->total_amount; // Add the current item's total_amount to the total variable

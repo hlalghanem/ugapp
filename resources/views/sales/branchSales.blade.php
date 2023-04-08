@@ -63,7 +63,7 @@
     <label for="date">Select a date:</label>
     <select id="date" name="date" class="form-select">
       @foreach ($prevSales as $date)
-      <option value="{{ $date->eod_date }}" class="form-option">{{ $date->eod_date }}</option>
+      <option value="{{ $date->eod_date }}" class="form-option">{{ \Carbon\Carbon::parse($date->eod_date)->format('D j M y') }}</option>
       @endforeach
     </select>
     <button onclick="goToDate()" class="btn btn-outline-secondary">Go</button>

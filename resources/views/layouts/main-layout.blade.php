@@ -42,7 +42,8 @@
                     Reports
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/reports/salesbydate">Sales by Date</a></li>
+                    <li><a class="dropdown-item" href="/reports/salesbydate">Sales by Payment </a></li>
+                    <li><a class="dropdown-item" href="/reports/salessummary">Sales Summary</a></li>
                    
                   </ul>
                 </li>

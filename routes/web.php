@@ -26,7 +26,7 @@ Route::delete('/branchuser/delete/{user_id}/{branch_id}', [Branch_Users_Controll
 
 // Reports Routes
 Route::get('/reports/salesbydate', [ReportsController::class, 'sales_report_by_date'])->middleware(['auth', 'verified'])->name('reports.bydate');
-
+Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_summary'])->middleware(['auth', 'verified'])->name('reports.salessummary');
 
 
 

@@ -36,6 +36,9 @@
         <tr>
             <th>#</th>
             <th>
+                <a href="?sort=id">ID</a>
+            </th>
+            <th>
                 <a href="?sort=name">Name</a>
             </th>
             
@@ -55,6 +58,7 @@
         @foreach($branches as $branch)
         <tr>
             <td>{{ $counter++ }}</td>
+            <td>{{ $branch->id }}</td>
             <td>{{ $branch->name }}</td>
            
             <td>
