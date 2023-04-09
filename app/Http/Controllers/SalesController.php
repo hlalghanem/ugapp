@@ -10,6 +10,32 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
+    public function live_sales()
+    {
+        $user = Auth::user(); // get the authenticated user
+        $user_id = $user->id;
+        $activeBranches = DB::table('branches')
+            ->where('is_active', 1)
+            ->pluck('id');
+        $user_active_branches = DB::table('branch_user')
+            ->where('user_id', $user_id)
+            ->whereIn('branch_id', $activeBranches)
+            ->where('is_active', 1)
+            ->get();
+            $branchIds = $user_active_branches->pluck('branch_id'); // get the IDs of the user's active branches
+        // $branchCount = $user_active_branches->count(); // get the count of the user's active branches
+        $customerIds = $branchIds;
+        $transactions = DB::table('branches AS A')
+                    ->leftJoin('transactions AS B', 'B.branch_id', '=', 'A.id')
+                    ->groupBy('A.name', 'A.last_eod','A.omega_id')
+                    ->select('A.name', 'A.last_eod','A.omega_id', DB::raw('COALESCE(SUM(B.amount_paid), 0) AS total_paid'))
+                    ->whereIn('A.id', $customerIds)
+                    ->orderBy('A.last_eod', 'desc')
+                    ->orderBy('total_paid', 'desc')
+                    ->get();
+        
+        return view('sales.livesales', ['transactions' => $transactions]);
+    }
     public function get_today_sales()
     {
         $user = Auth::user(); // get the authenticated user

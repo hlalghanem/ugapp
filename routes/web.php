@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Sales Routes
 Route::get('/', [SalesController::class, 'get_today_sales'])->middleware(['auth', 'verified'])->name('get_today_sales');
+Route::get('/live', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified'])->name('live_sales');
 Route::get('/sales/{omega_id}', [SalesController::class, 'showBranchSales'])->middleware(['auth', 'verified'])->name('showBranchSales');
 Route::get('/sales/{omega_id}/{eod_date}', [SalesController::class, 'showBranchSalesbyDate'])->middleware(['auth', 'verified'])->name('showBranchSalesbyDate');
 
