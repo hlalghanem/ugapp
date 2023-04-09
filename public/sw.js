@@ -1,54 +1,27 @@
-// Define the cache name and URLs to cache
-var CACHE_NAME = 'my-site-cache-v1';
-var urlsToCache = [
-  '/',
-  '/styles/main.css',
-  '/script/main.js',
-  '/images/logo.png'
-];
+const CACHE_NAME = 'my-cache';
 
-// Install the service worker and cache the specified URLs
-self.addEventListener('install', function(event) {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(function(cache) {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/index.html',
+        '/styles.css',
+        '/script.js',
+        '/images/icon.png'
+      ]);
+    })
   );
 });
 
-// Serve cached content when offline
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request).then((response) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
           return response;
-        }
-
-        // Clone the request to avoid modifying the original
-        var fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(
-          function(response) {
-            // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response to avoid modifying the original
-            var responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
-      })
+        });
+      });
+    })
   );
 });
