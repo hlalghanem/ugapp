@@ -115,8 +115,14 @@ class SalesController extends Controller
             ->where('omega_id', $omega_id)
             ->max('eod_date');
             if  (is_null($maxDate)) {
-                abort(404, 'no transaction for selected branch #19202');
+                // abort(404, 'no transaction for selected branch #19202');
+                $last_eod = DB::table('branches')
+                ->select('last_eod')
+                ->where('omega_id', '=', $omega_id)
+                ->first();
+                $maxDate=$last_eod->last_eod;
             }
+    //    dd($maxDate);
 
         $brTodayTotal = Transaction::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)

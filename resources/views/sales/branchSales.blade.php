@@ -3,15 +3,14 @@
 
 <div class="container">
   <br>
-  <h2>{{ $brTodayTotal->cust_name }}</h2>
-<p>L.Sync. {{ \Carbon\Carbon::parse($branchinfo->last_sync)->format('jM H:i ')}}
- L.Tran. {{ \Carbon\Carbon::parse($branchinfo->last_transaction)->format('jM H:i')}}</p>
-  
-  <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($brTodayTotal->eod_date)->format('D j M') }} </span>
-   
+ 
+  <h2>{{ $branchinfo->name }}</h2>
+  <p>L.Sync. {{ \Carbon\Carbon::parse($branchinfo->last_sync)->format('jM H:i ')}}
+    L.Tran. {{ \Carbon\Carbon::parse($branchinfo->last_transaction)->format('jM H:i')}}</p>
 
+  <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }} </span>
   </h3>
-
+  @if(count($totals)>0)
   <div class="table-responsive">
     <table class="table">
       <thead>
@@ -37,6 +36,9 @@
       </tfoot>
     </table>
   </div>
+  @else
+  <p class="m-2">No Transactions!</p>
+  @endif
 
   @if(count($totalsbyDate)>0)
   <h3><span class="badge text-bg-warning">Last 5 days</span></h3>
@@ -99,13 +101,21 @@
         border-radius: 0.25rem;
       }
     </style>
-    
+
     @endif
     <br>
-    <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-house-door">Back</i></a>
-    <br>
+    <!-- Go Back Button  -->
+    <button class="btn btn-outline-secondary" onclick="goBack()">Go Back </button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+    <!-- End ---Go Back Button  -->
+    <!-- <a href="/" class="btn btn-outline-secondary"> <i class="bi bi-house-door">Back</i></a> -->
+    
   </div>
-
+  <br>
 </div>
 
 @endsection

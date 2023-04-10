@@ -27,7 +27,9 @@
           <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date ?? date('Y-m-d') }}">
         </div>
         <button type="submit" class="btn btn-outline-secondary">Show</button>
+       
       </form>
+ 
     </div>
 
   </div>
@@ -64,6 +66,14 @@
         </tr>
 
   </table>
+<!-- Go Back Button  -->
+<button class="btn btn-outline-secondary mx-3" onclick="goBack()">Go Back </button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+    <!-- End ---Go Back Button  -->
 
 </div>
 
