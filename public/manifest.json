@@ -36,5 +36,10 @@
     "start_url": "/",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "splash_screen": {
+        "image": "/splash.gif",
+        "background_color": "#FFFFFF",
+        "resize_mode": "cover"
+      }
 }
