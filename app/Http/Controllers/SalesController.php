@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
+
+    public function deletetodaytranactions($omega_id)
+    {
+        if( auth()->check() && auth()->user()->is_admin == 1)
+        {
+            DB::table('transactions')->where('omega_id', '=', $omega_id)->delete();
+            // return redirect('/users')->with('success', 'User deleted successfully.');
+            return redirect()->route('showBranchSales', ['omega_id' => $omega_id])->with('success', 'transactions deleted successfully. Please refresh after 5 minuts to get the fresh data');
+
+        }
+    }
     public function live_sales()
     {
         $user = Auth::user(); // get the authenticated user
@@ -30,6 +41,7 @@ class SalesController extends Controller
                     ->groupBy('A.name', 'A.last_eod','A.omega_id')
                     ->select('A.name', 'A.last_eod','A.omega_id', DB::raw('COALESCE(SUM(B.amount_paid), 0) AS total_paid'))
                     ->whereIn('A.id', $customerIds)
+                    // ->where('A.last_eod','=','B.eod_date')
                     ->orderBy('A.last_eod', 'desc')
                     ->orderBy('total_paid', 'desc')
                     ->get();
@@ -111,17 +123,17 @@ class SalesController extends Controller
         }
 
 
-        $maxDate = DB::table('transactions')
-            ->where('omega_id', $omega_id)
-            ->max('eod_date');
-            if  (is_null($maxDate)) {
+        // $maxDate = DB::table('transactions')
+        //     ->where('omega_id', $omega_id)
+        //     ->max('eod_date');
+        //     if  (is_null($maxDate)) {
                 // abort(404, 'no transaction for selected branch #19202');
                 $last_eod = DB::table('branches')
                 ->select('last_eod')
                 ->where('omega_id', '=', $omega_id)
                 ->first();
                 $maxDate=$last_eod->last_eod;
-            }
+            // }
     //    dd($maxDate);
 
         $brTodayTotal = Transaction::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')

@@ -8,10 +8,12 @@ use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
 
 // Sales Routes
-Route::get('/', [SalesController::class, 'get_today_sales'])->middleware(['auth', 'verified'])->name('get_today_sales');
-Route::get('/live', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified'])->name('live_sales');
+Route::get('/', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified'])->name('live_sales');
+Route::get('/today', [SalesController::class, 'get_today_sales'])->middleware(['auth', 'verified'])->name('get_today_sales');
+
 Route::get('/sales/{omega_id}', [SalesController::class, 'showBranchSales'])->middleware(['auth', 'verified'])->name('showBranchSales');
 Route::get('/sales/{omega_id}/{eod_date}', [SalesController::class, 'showBranchSalesbyDate'])->middleware(['auth', 'verified'])->name('showBranchSalesbyDate');
+Route::delete('/sales/delete_today_transactions/{omega_id}', [SalesController::class, 'deletetodaytranactions'])->middleware(['auth', 'verified'])->name('deletetodaytranactions');
 
 // Branch Routes
 Route::get('/branch/all', [BranchesController::class, 'get_all_branches'])->middleware(['auth', 'verified'])->name('get_all_branches');

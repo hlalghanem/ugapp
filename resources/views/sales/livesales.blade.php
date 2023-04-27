@@ -8,7 +8,7 @@
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
-    color: black;
+    color: orange;
     background-color: whitesmoke;
     border: black;
     border-radius: 8px;
