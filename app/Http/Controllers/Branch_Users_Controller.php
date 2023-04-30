@@ -47,9 +47,10 @@ class Branch_Users_Controller extends Controller
         $branch =Branch::find($request->branch_id);
         $user_id= $request->user_id;
         $branch->users()->attach( $user_id);
+      
+        return back()->with('success', 'Branch assigned to user successfully!');
 
-
-        return redirect()->route('branches.users')->with('success', 'Branch assigned to user successfully!');
+    //    return redirect()->route('branches.users')->with('success', 'Branch assigned to user successfully!');
     }
 
     public function delete_branch_User($user_id,$branch_id)
@@ -60,6 +61,8 @@ class Branch_Users_Controller extends Controller
         $branch =Branch::find($branch_id);
         $branch->users()->detach( $user_id);
 
-        return redirect()->route('branches.users')->with('success', 'Branch unassigned successfully!');
+        return back()->with('success', 'Branch unassigned successfully!');
+
+        // return redirect()->route('branches.users')->with('success', 'Branch unassigned successfully!');
     }
 }

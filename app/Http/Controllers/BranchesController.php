@@ -49,6 +49,7 @@ class BranchesController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:branches',
             'omega_id' => 'required|integer|digits:6|unique:branches',
+          
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
@@ -72,7 +73,20 @@ class BranchesController extends Controller
         }
         $branch =Branch::find($id);
 
-        return view('admin_views.branches.branch_edit',['branch' => $branch]);
+        $users = User::select('users.id', 'users.name', 'users.email','branch_user.branch_id as branch_id')
+        ->join('branch_user', 'users.id', '=', 'branch_user.user_id')
+        ->where('branch_user.branch_id','=',$id)
+        ->get();
+
+        $users_not_assigned = User::select('users.id', 'users.name')
+        ->whereNotIn('id',  $users->pluck('id'))
+        ->orderBy('name')
+        ->get();
+
+        
+       
+
+        return view('admin_views.branches.branch_edit',['branch' => $branch,'users' => $users,'users_not_assigned' => $users_not_assigned]);
     }
 
     public function update(Request $request,$id)
@@ -83,6 +97,7 @@ class BranchesController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'sync_interval'=>'required|integer|min:3|max:30',
             // 'omega_id' => 'required|integer|digits:6|unique:branches',
         ]);
 
@@ -91,7 +106,10 @@ class BranchesController extends Controller
         }
         $branch= Branch::find($id);
         $branch->name = $request->input('name');
+        $branch->sync_interval = $request->input('sync_interval');
         $branch->is_active =$request->has('is_active') ? 1 : 0;
+        $branch->send_payments =$request->has('send_payments') ? 1 : 0;
+        $branch->send_sales_details =$request->has('send_sales_details') ? 1 : 0;
         $branch->save();
         
         return redirect()->route('get_all_branches')->with('success', 'Branch updated successfully!');
