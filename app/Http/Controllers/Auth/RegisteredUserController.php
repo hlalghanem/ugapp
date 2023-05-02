@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Events\NewUserRegistered;
+use App\Notifications\NewUserRegisteredNotification;
 
 class RegisteredUserController extends Controller
 {
@@ -43,9 +45,12 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+        // event(new NewUserRegistered($user));
+
+        // $user->notify(new NewUserRegisteredNotification($user));
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME)->with('success', 'Your branches will be activated soon. Please refresh the page after a few minutes.');
     }
 }

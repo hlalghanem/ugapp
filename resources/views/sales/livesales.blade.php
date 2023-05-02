@@ -1,5 +1,10 @@
 @extends('layouts.main-layout')
 @section('content')
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 <style>
   .refresh-btn {
     display: inline-flex;
