@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\Transaction;
 use App\Models\Payment;
+use App\Models\TempSale;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -153,6 +154,8 @@ class SalesController extends Controller
             ->orderBy('total_amount', 'desc')
             ->get();
 
+
+
         $totalsbyDate = Payment::selectRaw('eod_date, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             // ->where('eod_date', '<', $maxDate)
@@ -169,9 +172,32 @@ class SalesController extends Controller
             ->skip(5)->take(30)->get();
 
            // dd( $prevSales );
+
+           $open_orders = TempSale::selectRaw('SUM(total) as open_orders')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', 0)
+            ->first();
+            $discount = TempSale::selectRaw('SUM(discount) as discount')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->first();
+            $refund = TempSale::selectRaw('SUM(total) as refund')
+            ->where('omega_id', '=', $omega_id)
+            ->where('total', '<', 0)
+            ->where('closed', '=', -1)
+            ->first();
+            
+            $menu = TempSale::selectRaw('menu, SUM(total) as total_menu')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->groupBy('menu')
+            
+            ->orderBy('total_menu', 'desc')
+            ->get();
+
            
 
-        return view('sales.branchSales', ['branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
+        return view('sales.branchSales', ['menu' => $menu,'refund' => $refund,'discount' => $discount,'open_orders' => $open_orders,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
 
     }
 

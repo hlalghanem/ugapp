@@ -106,13 +106,7 @@ to {
         @foreach ($totals as $total)
         <tr>
           <td>{{ $total->payment_type }}</td>
-          {{-- <td>KD {{ $total->total_amount }}</td> --}}
-<td>
-  KD{{ $total->total_amount }}
-          
-
-
-</td>
+<td> KD{{ $total->total_amount }} </td>
 
 
         </tr>
@@ -137,51 +131,69 @@ to {
             $arrow = ($currentTotalPaid > $prevTotalPaid) ? '▲' : '▼';
             $changediff =$currentTotalPaid - $prevTotalPaid;
             @endphp
-            <b>KD {{ $brTodayTotal->total_amount }}</b>&nbsp;
+             
+            KD {{ $brTodayTotal->total_amount }}&nbsp;
 
           <span style="color: {{ $arrowColor }}">{{ $arrow }}KD&nbsp;{{number_format($changediff, 3)}}</span>
             @else
-            <b>KD {{ $brTodayTotal->total_amount }}</b>
+            <span class="badge text-bg-info">
+              <h5>
+          KD {{ $brTodayTotal->total_amount }}</h5></span>
             @endif
             @php
             session(['total_paid_' . $branchinfo->name =>  $brTodayTotal->total_amount]);
             @endphp
-
-{{-- 
-
-            @php
-          $prevTotalPaid = session('total_amount_' . $branchinfo->name, null);
-          $currentTotalPaid = $brTodayTotal->total_amount;
-          $changed = ($prevTotalPaid !== null && $prevTotalPaid !== $currentTotalPaid);
-          @endphp
-          @if ($changed)
-          @php
-          $color = ($currentTotalPaid > $prevTotalPaid) ? 'lightgreen' : 'red';
-          $arrowColor = ($currentTotalPaid > $prevTotalPaid) ? 'lightgreen' : 'red';
-          $arrow = ($currentTotalPaid > $prevTotalPaid) ? '▲' : '▼';
-          $diff =$currentTotalPaid - $prevTotalPaid;
-          @endphp
-           <b>KD {{ $brTodayTotal->total_amount }}</b>&nbsp;
-        <span style="color: {{ $arrowColor }}">KD<b> {{ $diff }}</b>{{ $arrow }}</span>
-       
-          @else
-          <b>KD {{ $brTodayTotal->total_amount }}</b>
-          @endif
-          @php
-          session(['total_amount_' . $branchinfo->name => $total->total_amount]);
-          @endphp --}}
-            
-            
-            
-            
           </td>
         </tr>
       </tfoot>
     </table>
   </div>
+  <div class="table-responsive">
+    <table class="table">
+      {{-- <thead>
+        <tr>
+  
+          <th scope="col">menu</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead> --}}
+      <tbody>
+        {{-- @php
+        $grand_total = 0; // Initialize the total amount variable
+        @endphp --}}
+        @foreach ($menu as $m)
+        <tr>
+          <td>{{ $m->menu }}</td>
+          <td>KD {{ $m->total_menu }}</td>
+          {{-- @php
+      $grand_total +=$m->total_menu; // Add the current item's total_amount to the total variable
+      @endphp --}}
+        </tr>
+        @endforeach
+      </tbody>
+      {{-- <tfoot>
+          <tr>
+            <td><b>Total</b></td>
+            <td><b>KD  {{ number_format($grand_total, 3) }}</b></td>
+          </tr>
+   --}}
+    </table>
+
   @else
   <p class="m-2">No Transactions!</p>
   @endif
+
+  @if ($open_orders->open_orders >0)
+  <p class="text-info">Total of Open Orders KD: {{ $open_orders->open_orders }}</p>
+  @endif
+  @if ($discount->discount >0)
+  <p class="text-warning">Total of Discount KD: {{ $discount->discount }}</p>
+  @endif
+  @if ($refund->refund <0)
+  <p class="text-danger">Total of Refund KD: {{ $refund->refund }}</p>
+  @endif
+
+  
   <div class="text-center m-1">
     <!-- <a href="/live" class="btn btn-outline-secondary"> <i class="bi bi-arrow-clockwise"></i></a> -->
     <button class="refresh-btn">
@@ -266,6 +278,8 @@ to {
       <br>
       <br>
       <br>
+      <br>
+      <br> <br>
       <br>
       <br>
     <form method="POST" action="{{ route('deletetodaytranactions', ['omega_id' => request('omega_id')]) }}" >
