@@ -34,12 +34,15 @@
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
+            {{-- <th>#</th> --}}
             <th>
                 <a href="?sort=id">ID</a>
             </th>
             <th>
                 <a href="?sort=name">Name</a>
+            </th>
+            <th>
+                <a href="?sort=last_eod">EOD</a>
             </th>
             
             <th>
@@ -57,9 +60,20 @@
         <?php $counter = 1; ?>
         @foreach($branches as $branch)
         <tr>
-            <td>{{ $counter++ }}</td>
+            {{-- <td>{{ $counter++ }}</td> --}}
             <td>{{ $branch->id }}</td>
             <td>{{ $branch->name }}</td>
+            <td>
+                @if (date('Y-m-d', strtotime($branch->last_eod)) != date('Y-m-d'))
+                <span class="badge text-bg-warning" >
+                  {{\Carbon\Carbon::parse($branch->last_eod)->format('D-d-m') }}
+                </span>
+                @else
+                <span class="badge text-bg-info">
+                  {{\Carbon\Carbon::parse($branch->last_eod)->format('D') }}
+                </span>
+                @endif
+            </td>
            
             <td>
                 {{\Carbon\Carbon::parse($branch->last_sync)->format('d-M H:i') }}
@@ -79,7 +93,14 @@
                 @else 
                 <i class="bi bi-circle-fill text-success" title="online"></i>
                 @endif 
+
+                @auth
+                @if (auth()->user()->group_id == 2)
+               
                 <a href="/branch/{{$branch->id }}/edit"><i class="bi bi-pencil-square"></i></a>
+                @endif
+                @endauth
+                
             </td>
         </tr>
         @endforeach

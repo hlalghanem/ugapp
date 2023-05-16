@@ -108,6 +108,23 @@
         @endforeach
     </tbody>
 </table>
+<br>
+<br>
+<br>
+Delete Payments:
+<form method="POST" action="{{ route('branches.deletepayments', ['id' => $branch->id]) }}">
+    @csrf
+    @method('DELETE')
+    
+      <label for="start_date" class="form-label">Start Date</label>
+      <input type="date" class="form-control" id="start_date" name="start_date" value="{{ date('Y-m-d') }}">
+   
+      <label for="end_date" class="form-label">End Date</label>
+      <input type="date" class="form-control" id="end_date" name="end_date" value="{{ date('Y-m-d') }}">
+    
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+   
+  </form>
 
 
 @endsection

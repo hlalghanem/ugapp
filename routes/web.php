@@ -21,6 +21,7 @@ Route::get('/branch/new', [BranchesController::class, 'create'])->middleware(['a
 Route::post('/branch/store', [BranchesController::class, 'store'])->middleware(['auth', 'verified'])->name('branches.store');
 Route::get('/branch/{id}/edit', [BranchesController::class, 'edit'])->middleware(['auth', 'verified'])->name('branches.edit');
 Route::put('/branch/{id}/update', [BranchesController::class, 'update'])->middleware(['auth', 'verified'])->name('branches.update');
+Route::delete('/branch/{id}/deletepayments', [BranchesController::class, 'deletepayments'])->middleware(['auth', 'verified'])->name('branches.deletepayments');
 
 // Branch Users Routes
 Route::get('/branch/users', [Branch_Users_Controller::class, 'get_all_branches_users'])->middleware(['auth', 'verified'])->name('branches.users');

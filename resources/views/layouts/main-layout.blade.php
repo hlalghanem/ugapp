@@ -30,16 +30,27 @@
                  @if (auth()->user()->group_id == 2)
                  <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Branches
+                    Admin
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/branch/all">All</a></li>
+                    <li><a class="dropdown-item" href="/branch/all">All Branches</a></li>
                     <li><a class="dropdown-item" href="/branch/users">Branch Users</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                   </ul>
                 </li>
                 
+                 @endif
+                 @if (auth()->user()->group_id == 2 or auth()->user()->group_id == 3)
+                 <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Staff
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/branch/all">All Branches</a></li>
+                  
+                  </ul>
+                </li>
                  @endif
                @endauth
 

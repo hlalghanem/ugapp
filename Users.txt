@@ -1,0 +1,5 @@
+customer group 1
+admin group 2
+omega staff group 3
+
+is_admin for customer so he can delete today sales
