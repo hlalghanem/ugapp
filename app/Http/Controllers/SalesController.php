@@ -35,7 +35,17 @@ class SalesController extends Controller
             ->where('is_active', 1)
             ->get();
             $branchIds = $user_active_branches->pluck('branch_id'); // get the IDs of the user's active branches
-        // $branchCount = $user_active_branches->count(); // get the count of the user's active branches
+    //    $branchCount = $user_active_branches->count(); // get the count of the user's active branches
+       if ($user_active_branches->count() === 1) {
+        $omega_id = DB::table('branches')
+            ->select('omega_id')
+            ->where('id', $user_active_branches->pluck('branch_id'))
+            ->first();
+
+        //dd($omega_id);
+        return redirect()->route('showBranchSales', ['omega_id' => $omega_id->omega_id]);
+    }
+       
         $customerIds = $branchIds;
         $transactions = DB::table('branches AS A')
                     ->leftJoin('transactions AS B', 'B.branch_id', '=', 'A.id')
@@ -195,9 +205,17 @@ class SalesController extends Controller
             ->orderBy('total_menu', 'desc')
             ->get();
 
+            $employee = TempSale::selectRaw('employee, SUM(total) as total_employee')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->groupBy('employee')
+            
+            ->orderBy('total_employee', 'desc')
+            ->get();
+
            
 
-        return view('sales.branchSales', ['menu' => $menu,'refund' => $refund,'discount' => $discount,'open_orders' => $open_orders,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
+        return view('sales.branchSales', ['employee' => $employee,'menu' => $menu,'refund' => $refund,'discount' => $discount,'open_orders' => $open_orders,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
 
     }
 
