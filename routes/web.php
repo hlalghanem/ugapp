@@ -5,13 +5,14 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\Branch_Users_Controller;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 // Sales Routes
 Route::get('/', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified'])->name('live_sales');
 Route::get('/today', [SalesController::class, 'get_today_sales'])->middleware(['auth', 'verified'])->name('get_today_sales');
 
-Route::get('/sales/{omega_id}', [SalesController::class, 'showBranchSales'])->middleware(['auth', 'verified'])->name('showBranchSales');
+Route::get('/sales/{omega_id}', [SalesController::class, 'showBranchSales'])->middleware(['auth', 'verified','updateLastLogin'])->name('showBranchSales');
 Route::get('/sales/{omega_id}/{eod_date}', [SalesController::class, 'showBranchSalesbyDate'])->middleware(['auth', 'verified'])->name('showBranchSalesbyDate');
 Route::delete('/sales/delete_today_transactions/{omega_id}', [SalesController::class, 'deletetodaytranactions'])->middleware(['auth', 'verified'])->name('deletetodaytranactions');
 
@@ -32,7 +33,8 @@ Route::delete('/branchuser/delete/{user_id}/{branch_id}', [Branch_Users_Controll
 Route::get('/reports/salesbydate', [ReportsController::class, 'sales_report_by_date'])->middleware(['auth', 'verified'])->name('reports.bydate');
 Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_summary'])->middleware(['auth', 'verified'])->name('reports.salessummary');
 
-
+//Users
+Route::get('/users', [UsersController::class, 'showUsers'])->middleware(['auth', 'verified'])->name('users.showUsers');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

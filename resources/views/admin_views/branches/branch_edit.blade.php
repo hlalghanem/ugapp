@@ -33,6 +33,10 @@
         <input type="number" class="form-control" name="sync_interval" id="sync_interval" value="{{$branch->sync_interval}}" >
     </div>
     <br>
+    <div>
+        <label class="form-label" >UG Server Version: {{$branch->ugserver_ver}}</label>
+    </div>
+    <br>
     <div class="form-check">
         <input class="form-check-input p-2" name="is_active" type="checkbox" id="is_active" {{ ($branch->is_active==1 ?  ' checked' : '') }}>
         <label class="form-check-label" for="is_active">

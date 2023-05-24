@@ -36,7 +36,7 @@
                     <li><a class="dropdown-item" href="/branch/all">All Branches</a></li>
                     <li><a class="dropdown-item" href="/branch/users">Branch Users</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><a class="dropdown-item" href="/users">Users</a></li>
                   </ul>
                 </li>
                 
