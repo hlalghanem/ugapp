@@ -19,6 +19,6 @@ class UsersController extends Controller
             return redirect()->route('logout');
         }
         $users = User::orderBy('last_login', 'desc')->get();
-        return view('admin_views.users', ['users' => $users]);
+        return view('admin_views.users', ['users' => $users])->with('success','Record added Successfully');
     }
 }

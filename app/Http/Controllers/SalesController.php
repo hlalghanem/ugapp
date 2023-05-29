@@ -17,6 +17,7 @@ class SalesController extends Controller
         if( auth()->check() && auth()->user()->is_admin == 1)
         {
             DB::table('transactions')->where('omega_id', '=', $omega_id)->delete();
+            DB::table('temp_sales')->where('omega_id', '=', $omega_id)->delete();
             // return redirect('/users')->with('success', 'User deleted successfully.');
             return redirect()->route('showBranchSales', ['omega_id' => $omega_id])->with('success', 'transactions deleted successfully. Please refresh after 5 minuts to get the fresh data');
 

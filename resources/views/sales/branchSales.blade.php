@@ -187,19 +187,34 @@ to {
             </table>
           </div>
             @if ($open_orders->open_orders >0)
-            <div class="card border-info ">
+            <div class="card border-info text-info mb-1 ">
               <div class="card-body">
                 <div class="row ">
                   <div class="col-8">
                    Open Orders KD: {{ $open_orders->open_orders }}
                   </div>
-                  <div class="col-4 text-info text-end">
+                  <div class="col-4  text-end">
                 <i class="bi bi-receipt"  style="font-size:26px;"></i>
                   </div>
                 </div>     
             </div>
         </div>  
         @endif
+
+        @if ($branchinfo->voids <0)
+        <div class="card border-danger ">
+          <div class="card-body">
+            <div class="row text-danger">
+              <div class="col-8">
+              Voids KD: {{ $branchinfo->voids }}
+              </div>
+              <div class="col-4 text-end">
+            <i class="bi bi-exclamation"  style="font-size:26px;"></i>
+              </div>
+            </div>     
+        </div>
+    </div>  
+    @endif
       </div>
     </div> </div>
     <div class="card mb-1">
@@ -380,6 +395,8 @@ to {
     <div class="text-center m-1">
       <br>
       <br>
+      <br><br>
+      <br><br>
       <br>
       <br>
       <br> <br>
@@ -388,7 +405,7 @@ to {
     <form method="POST" action="{{ route('deletetodaytranactions', ['omega_id' => request('omega_id')]) }}" >
       @csrf
       @method('delete')
-      <button type="submit" class="btn btn-outline-danger"> Delete today transactions & reupload fresh data</button>
+      <button type="submit" class="btn btn-outline-danger"> Delete Today Transactions & Reupload Fresh Data</button>
     </form>
   </div>        
     @endif

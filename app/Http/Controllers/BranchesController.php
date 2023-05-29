@@ -81,8 +81,8 @@ class BranchesController extends Controller
        $deletedRows = Payment::where('branch_id', $id)
        ->whereBetween('eod_date', [$startDate, $endDate])
        ->delete();
-
-   return redirect()->back()->with('success', $deletedRows . ' records deleted successfully.');
+       return redirect()->back()->with('message','Record added Successfully');
+//    return redirect()->back()->with('success', $deletedRows . ' records deleted successfully.');
         
            
        
