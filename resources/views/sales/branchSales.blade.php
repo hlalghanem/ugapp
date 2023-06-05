@@ -103,6 +103,11 @@ to {
         <div class="row ">
           
           <div class="col-4">
+            @if (strtotime($branchinfo->last_sync) < strtotime('-30 minutes')) 
+               
+            <span class="badge bg-danger">Offline</span>
+               
+                @endif 
          
           </div>
           <div class="col-4 text-center">

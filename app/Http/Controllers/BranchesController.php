@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Payment;
+use App\Models\Sale;
 use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -78,11 +79,17 @@ class BranchesController extends Controller
         
        $startDate= $request->input('start_date');
        $endDate= $request->input('end_date');
-       $deletedRows = Payment::where('branch_id', $id)
+       $deletedRowsPayments = Payment::where('branch_id', $id)
        ->whereBetween('eod_date', [$startDate, $endDate])
        ->delete();
-       return redirect()->back()->with('message','Record added Successfully');
-//    return redirect()->back()->with('success', $deletedRows . ' records deleted successfully.');
+
+       $deletedRowsSales = Sale::where('branch_id', $id)
+       ->whereBetween('eoddate', [$startDate, $endDate])
+       ->delete();
+
+
+    //    return redirect()->back()->with('message','Record added Successfully');
+      return redirect()->back()->with('success', $deletedRowsPayments .' Payments and ' . $deletedRowsSales .' Sales Details records deleted successfully.');
         
            
        
