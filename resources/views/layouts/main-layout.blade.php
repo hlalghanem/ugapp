@@ -11,9 +11,32 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+   
+   
+  @php
+    $language = auth()->check() ? auth()->user()->lang : 'en'; // Get the language from the authenticated user or use a default value
+    $isRTL = $language === 'ar'; // Check if the language is Arabic
+@endphp
 
+@if($isRTL)
+    <style>
+        body {
+            direction: rtl;
+        }
+    </style>
+@endif 
+@auth
+@php
+    $user = auth()->user();
+    $language = $user->lang;
+    app()->setLocale($language);
+@endphp
+@endauth
   </head>
   <body>
+ 
+
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand text-warning" href="/"><i><b>Q8</b>CRM</i></a>
@@ -23,7 +46,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/"> {{ __('translationFile.homePage') }}</a>
               </li>
               
                @auth
@@ -56,11 +79,12 @@
 
                <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Reports
+                    {{ __('translationFile.reports') }}
+                    
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/reports/salesbydate">Sales by Payment </a></li>
-                    <li><a class="dropdown-item" href="/reports/salessummary">Sales Summary</a></li>
+                    <li><a class="dropdown-item" href="/reports/salesbydate">  {{ __('translationFile.rep_Sales_By_Payment') }}</a></li>
+                    <li><a class="dropdown-item" href="/reports/salessummary">  {{ __('translationFile.rep_Sales_Summary') }}</a></li>
                    
                   </ul>
                 </li>
@@ -80,14 +104,18 @@
             @if (Route::has('login'))
             <div class="d-flex my-2 my-sm-0" role="search">
                     @auth
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                 
+                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu ">
-                                {{-- <li><a class="dropdown-item" href="#">Action</a></li> --}}
-                              <li> <a href="{{ route('logout') }}" class="dropdown-item">Log out</a></li>
+                                <li> <a href="{{ route('users.setLanguageAr') }}" class="dropdown-item">العربية</a></li>
+                                <li> <a href="{{ route('users.setLanguageEn') }}" class="dropdown-item">English</a></li>
+                              
+                              <li> <a href="{{ route('logout') }}" class="dropdown-item">{{ __('translationFile.logout') }}</a></li>
                             </ul>
                           </li>
                     </ul>
@@ -108,7 +136,8 @@
         </div>
       </nav>
 <div class="container">
-    @yield('content')
+
+@yield('content')
     <br><br>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>

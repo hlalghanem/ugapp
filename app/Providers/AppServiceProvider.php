@@ -3,8 +3,11 @@
 namespace App\Providers;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewUserRegistered;
+use App\Events\BranchUpdated;
+use App\Listeners\BranchUpdatedListener;
 
 use Illuminate\Support\ServiceProvider;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,9 +16,10 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function register()
     {
-        //
+       
     }
 
     /**

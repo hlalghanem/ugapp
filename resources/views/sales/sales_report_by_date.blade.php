@@ -1,21 +1,29 @@
 @extends('layouts.main-layout')
 @section('content')
+@auth
+@php
+    $user = auth()->user();
+    $language = $user->lang;
+    app()->setLocale($language);
+   
+@endphp
+@endauth
 <div class="container mt-5">
   <div class="row">
-  <h3>Sales by Payment </h3><hr>
+  <h3> {{ __('translationFile.rep_Sales_By_Payment') }}</h3><hr>
     <div class="col-md-6">
       <form method="GET" action="{{ route('reports.bydate') }}">
         <div class="mb-3">
-          <label for="branch" class="form-label">Select branch:</label>
+          <label for="branch" class="form-label">{{ __('translationFile.select_Branch') }}:</label>
           <select class="form-control" id="branch" name="branch">
-            <option value="all" {{ ($branch ?? '') == 'all' ? 'selected' : '' }}>All Branches</option>
+            <option value="all" {{ ($branch ?? '') == 'all' ? 'selected' : '' }}>{{ __('translationFile.all_Branches') }}</option>
             @foreach($branches as $branchOption)
             <option value="{{ $branchOption->id }}" {{ ($branch ?? '') == $branchOption->id ? 'selected' : '' }}>{{ $branchOption->name }}</option>
             @endforeach
           </select>
         </div>
         <div class="mb-3">
-          <label for="start_date" class="form-label">Start Date</label>
+          <label for="start_date" class="form-label">{{ __('translationFile.from_Date') }}</label>
 
           @php
           $firstDateOfMonth = now()->startOfMonth();;
@@ -23,10 +31,10 @@
           <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $start_date ?? $firstDateOfMonth->format('Y-m-d')  }}">
         </div>
         <div class="mb-3">
-          <label for="end_date" class="form-label">End Date</label>
+          <label for="end_date" class="form-label">{{ __('translationFile.to_Date') }}</label>
           <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date ?? date('Y-m-d') }}">
         </div>
-        <button type="submit" class="btn btn-outline-secondary">Show</button>
+        <button type="submit" class="btn btn-outline-secondary">{{ __('translationFile.show') }}</button>
        
       </form>
  
@@ -41,8 +49,8 @@
     <thead>
       <tr>
 
-        <th scope="col">Payment</th>
-        <th scope="col">Total</th>
+        <th scope="col">{{ __('translationFile.payment') }}</th>
+        <th scope="col">{{ __('translationFile.total') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -61,13 +69,13 @@
     </tbody>
     <tfoot>
         <tr>
-          <td><b>Total</b></td>
+          <td><b>{{ __('translationFile.grand_total') }}</b></td>
           <td><b>KD  {{ number_format($grand_total, 3) }}</b></td>
         </tr>
 
   </table>
 <!-- Go Back Button  -->
-<button class="btn btn-outline-secondary mx-3" onclick="goBack()">Go Back </button>
+<button class="btn btn-outline-secondary mx-3" onclick="goBack()">{{ __('translationFile.goBack') }}</button>
     <script>
       function goBack() {
         window.history.back();

@@ -7,6 +7,13 @@
     </div>
 @endif
 
+@auth
+@php
+    $user = auth()->user();
+    $language = $user->lang;
+    app()->setLocale($language);
+@endphp
+@endauth
 
 <style>
   .form-select {
@@ -92,7 +99,8 @@ to {
           <div class="col-6">
             <h2>{{ $branchinfo->name }}</h2>
           </div>
-          <div class="col-6 text-end">
+          <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
+          
             @if (date('Y-m-d', strtotime($branchinfo->last_eod)) != date('Y-m-d'))
             <h3><span class="badge text-bg-warning"> {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }} </span></h3>
             @else
@@ -114,7 +122,7 @@ to {
             <button class="refresh-btn">
               <span class="spinner"></span>
               <i class="bi bi-arrow-clockwise"></i>
-              Refresh
+              {{ __('translationFile.refresh') }}
             </button>
           </div>
           <div class="col-4 text-end">
@@ -129,7 +137,7 @@ to {
       <div class="card-header">
     
         <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
-        <b>  Sales by Payment  KD {{ $brTodayTotal->total_amount }} ▼</b>
+        <b>   {{ __('translationFile.rep_Sales_By_Payment') }} {{ $brTodayTotal->total_amount }} ▼</b>
         
         </a>
       
@@ -198,7 +206,7 @@ to {
                   <div class="col-8">
                    Open Orders KD: {{ $open_orders->open_orders }}
                   </div>
-                  <div class="col-4  text-end">
+                  <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
                 <i class="bi bi-receipt"  style="font-size:26px;"></i>
                   </div>
                 </div>     
@@ -275,12 +283,12 @@ to {
     <div class="card mb-1">
       <div class="card-header">
     <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
-      <b>  Sales by Payment  ▼</b>
+      <b>  {{ __('translationFile.rep_Sales_By_Payment') }}  ▼</b>
       </a>
     </div>
     <div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
       <div class="card-body">
-        <p class="m-2">No Transactions!</p>
+        <p class="m-2">{{ __('translationFile.noTransactions') }}</p>
         @if ($open_orders->open_orders >0)
         <p class="text-info">Total of Open Orders KD: {{ $open_orders->open_orders }}</p>
         @endif

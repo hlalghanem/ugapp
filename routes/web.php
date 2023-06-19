@@ -35,6 +35,8 @@ Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_sum
 
 //Users
 Route::get('/users', [UsersController::class, 'showUsers'])->middleware(['auth', 'verified'])->name('users.showUsers');
+Route::get('/users/setLanguageAr', [UsersController::class, 'setLanguageAr'])->middleware(['auth', 'verified'])->name('users.setLanguageAr');
+Route::get('/users/setLanguageEn', [UsersController::class, 'setLanguageEn'])->middleware(['auth', 'verified'])->name('users.setLanguageEn');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

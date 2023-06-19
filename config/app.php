@@ -82,7 +82,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ar', // Default language
+    'locales' => ['en', 'ar'], // Available locales
 
     /*
     |--------------------------------------------------------------------------
