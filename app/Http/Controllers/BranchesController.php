@@ -60,6 +60,7 @@ class BranchesController extends Controller
     
             $branch = new Branch();
             $branch->name = $request->input('name');
+            $branch->name_ar = $request->input('name_ar');
             $branch->omega_id = $request->input('omega_id');
             $branch->created_by =auth()->user()->name;
             $branch->save();
@@ -127,6 +128,7 @@ class BranchesController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'name_ar' => 'required',
             'sync_interval' => 'required|integer|min:3|max:30',
             // 'omega_id' => 'required|integer|digits:6|unique:branches',
         ]);
@@ -136,6 +138,7 @@ class BranchesController extends Controller
         }
         $branch = Branch::find($id);
         $branch->name = $request->input('name');
+        $branch->name_ar = $request->input('name_ar');
         $branch->sync_interval = $request->input('sync_interval');
         $branch->is_active = $request->has('is_active') ? 1 : 0;
         $branch->send_payments = $request->has('send_payments') ? 1 : 0;

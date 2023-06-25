@@ -25,6 +25,10 @@
         <input type="text" class="form-control" name="name" id="name" value="{{ $branch->name}}" required minlength="3">
     </div>
     <div>
+        <label class="form-label" for="name_ar">Arabic Name:</label>
+        <input type="text" class="form-control" name="name_ar" id="name_ar" value="{{ $branch->name_ar}}" required minlength="3">
+    </div>
+    <div>
         <label class="form-label" for="omega_id">Omega ID:</label>
         <input type="number" class="form-control" name="omega_id" id="omega_id" value="{{$branch->omega_id}}" >
     </div>

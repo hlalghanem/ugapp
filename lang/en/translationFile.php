@@ -19,6 +19,15 @@ return [
     'logout' => 'Log out',
     'noTransactions' => 'No Transactions!',
     'refresh' => 'Refresh',
+    'kd' => 'KD',
+    'open_orders_amount' => 'Open Orders KD: ',
+    'voids_total' => 'Voids KD: ',
+    'discount_total' => ' Total of Discount KD: ',
+    'refund_total' => 'Total of Refund KD: ',
+    'sales_By_Menu' => 'Sales By Menu ',
+    'sales_By_Employee' => 'Sales By Employee ',
+    'sales_History' => ' Sales History ',
+    'last_5_days' => ' Last 5 days',
 
 
 

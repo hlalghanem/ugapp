@@ -12,8 +12,25 @@
     $user = auth()->user();
     $language = $user->lang;
     app()->setLocale($language);
+  
 @endphp
 @endauth
+
+{{-- @php
+    use Carbon\Carbon;
+
+    // Set the locale to Arabic
+    Carbon::setLocale('ar');
+
+    // Create a Carbon instance with the desired date
+    $date =$branchinfo->last_eod;
+
+    // Format the date in Arabic
+    $arabicFormattedDate = $date->isoFormat('ddd، D MMMM');
+@endphp
+
+<p>{{ $arabicFormattedDate }}</p>
+ --}}
 
 <style>
   .form-select {
@@ -97,14 +114,15 @@ to {
       <div class="card-header">
         <div class="row ">
           <div class="col-6">
-            <h2>{{ $branchinfo->name }}</h2>
+            @if($language === 'en')  <h2>{{ $branchinfo->name }}</h2> @else   <h2>{{ $branchinfo->name_ar }}</h2> @endif
+          
           </div>
-          <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
+          <div class="col-6 @if($language === 'en') text-end @else text-start @endif">
           
             @if (date('Y-m-d', strtotime($branchinfo->last_eod)) != date('Y-m-d'))
-            <h3><span class="badge text-bg-warning"> {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }} </span></h3>
+            <h3><span class="badge text-bg-warning">  @if($language === 'en')  {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }}  @else    {{ \Carbon\Carbon::parse($branchinfo->last_eod)->isoFormat('dddd D MMMM') }} @endif</span></h3>
             @else
-            <h3><span class="badge text-bg-info"> {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }} </span></h3>
+            <h3><span class="badge text-bg-info">  @if($language === 'en')  {{ \Carbon\Carbon::parse($branchinfo->last_eod)->format('D j M') }}  @else    {{ \Carbon\Carbon::parse($branchinfo->last_eod)->isoFormat('dddd D MMMM') }} @endif</span></h3>
             @endif
           </div>
         </div>     
@@ -149,15 +167,15 @@ to {
               <thead>
                 <tr>
         
-                  <th scope="col">Payment</th>
-                  <th scope="col">Total</th>
+                  <th scope="col"> {{ __('translationFile.payment') }}</th>
+                  <th scope="col"> {{ __('translationFile.total') }}</th>
                 </tr>
               </thead>
               <tbody>
                 @foreach ($totals as $total)
                 <tr>
                   <td>{{ $total->payment_type }}</td>
-        <td> KD{{ $total->total_amount }} </td>
+        <td>{{ $total->total_amount }} </td>
         
         
                 </tr>
@@ -165,7 +183,7 @@ to {
               </tbody>
               <tfoot>
                 <tr>
-                  <td><b>Total</b></td>
+                  <td><b> {{ __('translationFile.grand_total') }}</b></td>
                   <td>
                     
         
@@ -183,7 +201,7 @@ to {
                     $changediff =$currentTotalPaid - $prevTotalPaid;
                     @endphp
                      
-                    KD {{ $brTodayTotal->total_amount }}&nbsp;
+                     {{ $brTodayTotal->total_amount }}&nbsp;
         
                   <span style="color: {{ $arrowColor }}">{{ $arrow }}KD&nbsp;{{number_format($changediff, 3)}}</span>
                     @else
@@ -204,7 +222,7 @@ to {
               <div class="card-body">
                 <div class="row ">
                   <div class="col-8">
-                   Open Orders KD: {{ $open_orders->open_orders }}
+                    {{ __('translationFile.open_orders_amount') }}{{ $open_orders->open_orders }}
                   </div>
                   <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
                 <i class="bi bi-receipt"  style="font-size:26px;"></i>
@@ -215,25 +233,58 @@ to {
         @endif
 
         @if ($branchinfo->voids <0)
-        <div class="card border-danger ">
+        <div class="card border-danger mb-1">
           <div class="card-body">
             <div class="row text-danger">
               <div class="col-8">
-              Voids KD: {{ $branchinfo->voids }}
+                {{ __('translationFile.voids_total') }}{{ $branchinfo->voids }}
               </div>
-              <div class="col-4 text-end">
+              <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
             <i class="bi bi-exclamation"  style="font-size:26px;"></i>
               </div>
             </div>     
         </div>
     </div>  
     @endif
-      </div>
-    </div> </div>
+     
+
+    {{-- Discount and Refund --}}
+    @if ($discount->discount >0)
+    <div class="card bg-warning mb-1">
+      <div class="card-body">
+        <div class="row ">
+          <div class="col-8">
+            {{ __('translationFile.discount_total') }} {{ $discount->discount }}   
+          </div>
+          <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
+        <i class="bi bi-cash-coin"  style="font-size:26px;"></i>
+          </div>
+        </div>     
+    </div>
+  </div>  
+  @endif
+  @if ($refund->refund <0)
+  <div class="card bg-danger ">
+    <div class="card-body">
+      <div class="row ">
+        <div class="col-8">
+          {{ __('translationFile.refund_total') }} {{ $refund->refund }}   
+        </div>
+        <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
+      <i class="bi bi-exclamation-triangle"  style="font-size:26px;"></i>
+        </div>
+      </div>     
+  </div>
+</div> 
+  @endif
+{{-- End. Discount and Refund --}}
+</div> </div> </div>
+   
+
     <div class="card mb-1">
       <div class="card-header">
         <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseTwo">
-          <b>  Sales by Menu ▼</b>
+          <b> {{ __('translationFile.sales_By_Menu') }} ▼</b>
       </a>
       </div>
       <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
@@ -257,7 +308,7 @@ to {
     <div class="card mb-1">
       <div class="card-header">
         <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseThree">
-          <b>  Sales by Employee ▼</b>
+          <b>  {{ __('translationFile.sales_By_Employee') }} ▼</b>
         </a>
       </div>
       <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
@@ -290,7 +341,7 @@ to {
       <div class="card-body">
         <p class="m-2">{{ __('translationFile.noTransactions') }}</p>
         @if ($open_orders->open_orders >0)
-        <p class="text-info">Total of Open Orders KD: {{ $open_orders->open_orders }}</p>
+        <p class="text-info"> {{ __('translationFile.open_orders_amount') }} {{ $open_orders->open_orders }}</p>
         @endif
       </div>
     </div>
@@ -298,54 +349,24 @@ to {
    
     @endif
 
-    @if ($discount->discount >0)
-    <div class="card bg-warning mb-1">
-      <div class="card-body">
-        <div class="row ">
-          <div class="col-8">
-            Total of Discount KD: {{ $discount->discount }}   
-          </div>
-          <div class="col-4 text-end">
-        <i class="bi bi-cash-coin"  style="font-size:26px;"></i>
-          </div>
-        </div>     
-    </div>
-  </div>  
-  @endif
-  @if ($refund->refund <0)
-  <div class="card bg-danger mb-1">
-    <div class="card-body">
-      <div class="row ">
-        <div class="col-8">
-          Total of Refund KD: {{ $refund->refund }}   
-        </div>
-        <div class="col-4 text-end">
-      <i class="bi bi-exclamation-triangle"  style="font-size:26px;"></i>
-        </div>
-      </div>     
-  </div>
-</div>  
- 
-  @endif
-
 
   @if(count($totalsbyDate)>0)
   <div class="card mb-1">
     <div class="card-header">
   <a class="btn" data-bs-toggle="collapse" href="#collapseHistory">
-    <b>  Sales History  ▼</b>
+    <b> {{ __('translationFile.sales_History') }}  ▼</b>
     </a>
   </div>
   <div id="collapseHistory" class="collapse" data-bs-parent="#accordion">
     <div class="card-body">
-      Last 5 days:
+      {{ __('translationFile.last_5_days') }}
       <div class="table-responsive">
         <table class="table">
           <tbody>
             @foreach ($totalsbyDate as $total)
             <tr>
               <td>
-                <a style="text-decoration:none" href="/sales/{{ request('omega_id') }}/{{ $total->eod_date }}">{{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }}</a>
+                <a style="text-decoration:none" href="/sales/{{ request('omega_id') }}/{{ $total->eod_date }}">@if($language === 'en')  {{ \Carbon\Carbon::parse($total->eod_date)->format('D j M') }}  @else    {{ \Carbon\Carbon::parse($total->eod_date)->isoFormat('dddd D MMMM') }} @endif</a>
               </td>
               <td>KD {{ $total->total_amount }}</td>
             </tr>
@@ -359,12 +380,12 @@ to {
       <div class="col">
     <select id="date" name="date" class="form-select">
       @foreach ($prevSales as $date)
-      <option value="{{ $date->eod_date }}" class="form-option">{{ \Carbon\Carbon::parse($date->eod_date)->format('D j M y') }}</option>
+      <option value="{{ $date->eod_date }}" class="form-option"> @if($language === 'en')  {{ \Carbon\Carbon::parse($date->eod_date)->format('D j M') }}  @else    {{ \Carbon\Carbon::parse($date->eod_date)->isoFormat('dddd D MMMM') }} @endif</option>
       @endforeach
     </select>
       </div>
       <div class="col">
-        <button onclick="goToDate()" class="btn btn-outline-secondary">Go</button>
+        <button onclick="goToDate()" class="btn btn-outline-secondary"> {{ __('translationFile.show') }}</button>
       </div>
     </div>
      @endif
@@ -393,7 +414,7 @@ to {
    <br>
 
   
-    <div class="text-center m-1"> <button class="btn btn-outline-secondary" onclick="goBack()">Go Back </button>
+    <div class="text-center m-1"> <button class="btn btn-outline-secondary" onclick="goBack()"> {{ __('translationFile.goBack') }}</button>
       <script>
         function goBack() {
           window.history.back();
