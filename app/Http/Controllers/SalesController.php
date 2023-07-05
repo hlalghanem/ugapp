@@ -6,6 +6,8 @@ use App\Models\Branch;
 use App\Models\Transaction;
 use App\Models\Payment;
 use App\Models\TempSale;
+use App\Models\Sale;
+use App\Models\VoidRefund;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -244,37 +246,70 @@ class SalesController extends Controller
         if ($user_active_branches->count() < 1) {
             abort(404, 'you do not have any branch');
         }
-
+               
 
         $brTodayTotal = Payment::selectRaw('cust_name,eod_date, SUM(amount_paid) as total_amount')
-            ->where('omega_id', '=', $omega_id)
-            ->where('eod_date', '=', $eod_date)
-            ->groupBy('cust_name', 'eod_date')
-            ->first();
+        ->where('omega_id', '=', $omega_id)
+        ->where('eod_date', '=', $eod_date)
+        ->groupBy('cust_name', 'eod_date')
+        ->first();
 
-            // if (is_null($brTodayTotal)){
-            //     abort(400, 'Invalid request. <a href="' . back()->getTargetUrl() . '">Go back</a>');
-
-            // }
-
-
+         $branchinfo =Branch::where('omega_id', '=', $omega_id)->first();
+         
 
         $totals = Payment::selectRaw('payment_type, SUM(amount_paid) as total_amount')
             ->where('omega_id', '=', $omega_id)
             ->where('eod_date', '=', $eod_date)
             ->groupBy('payment_type')
-           
+            
             ->orderBy('total_amount', 'desc')
             ->get();
 
-        $totalsbyDate = Payment::selectRaw('eod_date, SUM(amount_paid) as total_amount')
-            ->where('omega_id', '=', $omega_id)
-            ->where('eod_date', '<', $eod_date)
-            ->groupBy('eod_date')
-            ->orderBy('eod_date', 'desc')
-            ->take(5)
-            ->get();
-        return view('sales.branch_sales_by_date', ['totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate, 'omega_id' => $omega_id ]);
 
+         
+            $discount = Sale::selectRaw('SUM(discount) as discount')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->where('eoddate', '=', $eod_date)
+            ->first();
+            $refund = Sale::selectRaw('SUM(total) as refund')
+            ->where('omega_id', '=', $omega_id)
+            ->where('total', '<', 0)
+            ->where('eoddate', '=', $eod_date)
+            ->where('closed', '=', -1)
+            ->first();
+            $voids = VoidRefund::selectRaw('SUM(totalprice) as voids')
+            ->where('omega_id', '=', $omega_id)
+            ->where('totalprice', '<', 0)
+            ->where('eoddate', '=', $eod_date)
+            ->where('invoicenumber', '<', 20000000)
+            ->first();
+            
+            $menu = Sale::selectRaw('menu, SUM(total) as total_menu')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->where('eoddate', '=', $eod_date)
+            ->groupBy('menu')
+            
+            ->orderBy('total_menu', 'desc')
+            ->get();
+
+            $employee = Sale::selectRaw('employee, SUM(total) as total_employee')
+            ->where('omega_id', '=', $omega_id)
+            ->where('closed', '=', -1)
+            ->where('eoddate', '=', $eod_date)
+            ->groupBy('employee')
+            
+            ->orderBy('total_employee', 'desc')
+            ->get();
+
+           
+
+        return view('sales.branch_sales_by_date', ['voids' => $voids,'employee' => $employee,'menu' => $menu,'refund' => $refund,'discount' => $discount,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal]);
+
+
+
+
+       
     }
 }
