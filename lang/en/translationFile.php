@@ -28,6 +28,7 @@ return [
     'sales_By_Employee' => 'Sales By Employee ',
     'sales_History' => ' Sales History ',
     'last_5_days' => ' Last 5 days',
+    'mybranches' => 'My Branches',
 
 
 

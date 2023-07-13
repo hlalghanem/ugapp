@@ -27,6 +27,7 @@ return [
     'sales_By_Employee' => 'المبيعات حسب الموظف ',
     'sales_History' => 'مبيعات الأيام السابقة',
     'last_5_days' => ' مبيعات اخر 5 ايام',
+    'mybranches' => 'فروعي',
 
 
 ];

@@ -15,6 +15,12 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+         <!-- Company Name -->
+         <div class="mt-4">
+            <x-input-label for="company" :value="__('Company')" />
+            <x-text-input id="company" class="block mt-1 w-full" type="text" name="company" :value="old('company')" required/>
+            <x-input-error :messages="$errors->get('company')" class="mt-2" />
+        </div>
 
         <!-- Password -->
         <div class="mt-4">

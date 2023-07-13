@@ -14,11 +14,12 @@
         <td>
             <b>{{ $usr->name }}</b></td>
         <td>{{ $usr->email }}</td>
-       
+       <td></td>
     </tr>
     <tr>
         <td>  Last Login:</td>
         <td>{{ $usr->last_login }}</td>
+        <td><a href="/user/{{$usr->id }}/edit"><i class="bi bi-pencil-square"></i></a></td>
        
     </tr>
 

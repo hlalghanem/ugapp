@@ -6,6 +6,7 @@ use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\Branch_Users_Controller;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
+use App\http\Controllers\MyBranchesController;
 use Illuminate\Support\Facades\Route;
 
 // Sales Routes
@@ -23,12 +24,15 @@ Route::post('/branch/store', [BranchesController::class, 'store'])->middleware([
 Route::get('/branch/{id}/edit', [BranchesController::class, 'edit'])->middleware(['auth', 'verified'])->name('branches.edit');
 Route::put('/branch/{id}/update', [BranchesController::class, 'update'])->middleware(['auth', 'verified'])->name('branches.update');
 Route::delete('/branch/{id}/deletepayments', [BranchesController::class, 'deletepayments'])->middleware(['auth', 'verified'])->name('branches.deletepayments');
+// My Branches Routes
+
 
 // Branch Users Routes
 Route::get('/branch/users', [Branch_Users_Controller::class, 'get_all_branches_users'])->middleware(['auth', 'verified'])->name('branches.users');
 Route::post('/branchuser/store', [Branch_Users_Controller::class, 'assign_branch_User'])->middleware(['auth', 'verified'])->name('assign.branchUser');
 Route::delete('/branchuser/delete/{user_id}/{branch_id}', [Branch_Users_Controller::class, 'delete_branch_User'])->middleware(['auth', 'verified'])->name('delete.branchUser');
-
+Route::get('/myallbranches',[Branch_Users_Controller::class, 'showMyAllBranches'])->name('showMyAllBranches');
+Route::put('/updateMyActiveBranches/{branchid}/{value}',[Branch_Users_Controller::class, 'updateMyActiveBranches'])->name('updateMyActiveBranches');
 // Reports Routes
 Route::get('/reports/salesbydate', [ReportsController::class, 'sales_report_by_date'])->middleware(['auth', 'verified'])->name('reports.bydate');
 Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_summary'])->middleware(['auth', 'verified'])->name('reports.salessummary');
@@ -37,6 +41,8 @@ Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_sum
 Route::get('/users', [UsersController::class, 'showUsers'])->middleware(['auth', 'verified'])->name('users.showUsers');
 Route::get('/users/setLanguageAr', [UsersController::class, 'setLanguageAr'])->middleware(['auth', 'verified'])->name('users.setLanguageAr');
 Route::get('/users/setLanguageEn', [UsersController::class, 'setLanguageEn'])->middleware(['auth', 'verified'])->name('users.setLanguageEn');
+Route::get('/user/{id}/edit', [UsersController::class, 'userPage'])->middleware(['auth', 'verified'])->name('user.edit');
+Route::put('/user/{id}/update', [UsersController::class, 'userUpdate'])->middleware(['auth', 'verified'])->name('user.update');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

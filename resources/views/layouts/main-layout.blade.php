@@ -17,7 +17,17 @@
     $language = auth()->check() ? auth()->user()->lang : 'en'; // Get the language from the authenticated user or use a default value
     $isRTL = $language === 'ar'; // Check if the language is Arabic
 @endphp
+<style>
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f8f8;
+    padding: 20px;
+}
 
+</style>
 @if($isRTL)
     <style>
         body {
@@ -47,6 +57,9 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/"> {{ __('translationFile.homePage') }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/myallbranches"> {{ __('translationFile.mybranches') }}</a>
               </li>
               
                @auth
@@ -138,6 +151,10 @@
 <div class="container">
 
 @yield('content')
+{{-- <footer class="footer">
+  <p class="text-center"></p>
+</footer> --}}
+
     <br><br>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
