@@ -26,7 +26,7 @@
           <label for="start_date" class="form-label">{{ __('translationFile.from_Date') }}</label>
 
           @php
-          $firstDateOfMonth = now()->startOfMonth();;
+          $firstDateOfMonth = now()->startOfMonth();
           @endphp
           <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $start_date ?? $firstDateOfMonth->format('Y-m-d')  }}">
         </div>

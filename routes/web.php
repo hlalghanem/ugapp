@@ -8,6 +8,12 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use App\http\Controllers\MyBranchesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MyEnglishController;
+
+// My English Routes
+Route::get('/myenglishway/{student}',[MyEnglishController::class,'myenglishdataentry']);
+Route::post('/myenglishway/store',[MyEnglishController::class,'myenglishdatastore'])->name('myenglishdatastore');
+Route::delete('/myenglishway/delete/{id}',[MyEnglishController::class,'myenglishdatadelete'])->name('myenglishdatadelete');
 
 // Sales Routes
 Route::get('/', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified'])->name('live_sales');
