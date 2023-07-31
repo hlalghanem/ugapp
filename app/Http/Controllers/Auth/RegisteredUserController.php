@@ -36,6 +36,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'company' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'integer', 'digits:8'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()->min(4)],
         ]);
 
@@ -43,6 +44,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'company' => $request->company,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
@@ -53,6 +55,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME)->with('success', 'Your branches will be activated soon. Please refresh the page after a few minutes.');
+        return redirect(RouteServiceProvider::HOME)->with('success', 'Your branches will be activated soon, our team will contact you soon to confirm it.سيتم تفعيل فروعك قريبًا وسيتصل بك فريقنا قريبًا لتأكيد ذلك. ');
     }
 }

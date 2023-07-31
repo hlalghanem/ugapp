@@ -29,6 +29,8 @@ class User extends Authenticatable
         'last_login',
         'lang',
         'company',
+        'phone',
+        'position',
 
     ];
 
