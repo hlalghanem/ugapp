@@ -29,6 +29,9 @@ return [
     'sales_History' => ' Sales History ',
     'last_5_days' => ' Last 5 days',
     'mybranches' => 'My Branches',
+    'complete_report' => 'Complete report',
+    'brnach_name' => 'Branch',
+    'offline' => 'Offline',
 
 
 

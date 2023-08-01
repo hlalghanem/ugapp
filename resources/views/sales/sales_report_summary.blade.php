@@ -1,24 +1,32 @@
 @extends('layouts.main-layout')
 @section('content')
+@auth
+@php
+    $user = auth()->user();
+    $language = $user->lang;
+    app()->setLocale($language);
+   
+@endphp
+@endauth
 <div class="container mt-5">
   <div class="row">
-    <h3>Sales Summary </h3><hr>
+    <h3>{{ __('translationFile.rep_Sales_Summary') }}</h3><hr>
     <div class="col-md-6">
       <form method="GET" action="{{ route('reports.salessummary') }}">
         
-        <div class="mb-3">
-          <label for="start_date" class="form-label">Start Date</label>
+        <div class="mb-1">
+          <label for="start_date" class="form-label">{{ __('translationFile.from_Date') }}</label>
 
           @php
-          $firstDateOfMonth = now()->startOfMonth();;
+          $firstDateOfMonth = now()->startOfMonth();
           @endphp
           <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $start_date ?? $firstDateOfMonth->format('Y-m-d')  }}">
         </div>
-        <div class="mb-3">
-          <label for="end_date" class="form-label">End Date</label>
+        <div class="mb-1">
+          <label for="end_date" class="form-label">{{ __('translationFile.to_Date') }}</label>
           <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date ?? date('Y-m-d') }}">
         </div>
-        <button type="submit" class="btn btn-outline-secondary">Show</button>
+        <button type="submit" class="btn btn-outline-secondary">{{ __('translationFile.show') }}</button>
       
       </form>
  
@@ -28,14 +36,13 @@
   </div>
 </div>
 
-
 <div class="table-responsive">
   <table class="table">
     <thead>
       <tr>
 
-        <th scope="col">Branch</th>
-        <th scope="col">Total</th>
+        <th scope="col">{{ __('translationFile.brnach_name') }}</th>
+        <th scope="col">{{ __('translationFile.total') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -44,7 +51,12 @@
       @endphp
       @foreach ($totals as $total)
       <tr>
-        <td>{{ $total->cust_name }}</td>
+        @if($language === 'en')
+        <td>{{ $total->name }}</td>
+        @else
+        <td>{{ $total->name_ar }}</td>
+        @endif
+       
         <td>KD {{ $total->total_amount }}</td>
         @php
     $grand_total += $total->total_amount; // Add the current item's total_amount to the total variable
@@ -54,13 +66,13 @@
     </tbody>
     <tfoot>
         <tr>
-          <td><b>Total</b></td>
+          <td><b>{{ __('translationFile.grand_total') }}</b></td>
           <td><b>KD  {{ number_format($grand_total, 3) }}</b></td>
         </tr>
 
   </table>
 <!-- Go Back Button  -->
-<button class="btn btn-outline-secondary mx-3" onclick="goBack()">Go Back </button>
+<button class="btn btn-outline-secondary mx-3" onclick="goBack()">{{ __('translationFile.goBack') }}</button>
     <script>
       function goBack() {
         window.history.back();

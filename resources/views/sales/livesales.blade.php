@@ -5,6 +5,15 @@
     {{ session('success') }}
 </div>
 @endif
+@auth
+@php
+    $user = auth()->user();
+    $language = $user->lang;
+    app()->setLocale($language);
+    $redcolor=0;
+   
+@endphp
+@endauth
 <style>
   .refresh-btn {
     display: inline-flex;
@@ -71,22 +80,40 @@
   <button class="refresh-btn">
     <span class="spinner"></span>
     <i class="bi bi-arrow-clockwise"></i>
-    Refresh
+    {{ __('translationFile.refresh') }}
   </button>
 </div>
 
 @foreach ($transactions as $transaction)
 <div class="card">
+ 
   <div class="card-header">
     <div class="row p-0 m-0">
-      <div class="col-6 p-0 m-0">
-        <b> <a class="text-decoration-none text-dark" href="/sales/{{ $transaction->omega_id }}">{{ strtoupper($transaction->name ) }} </a></b>
+
+    @if (strtotime($transaction->last_sync) < strtotime('-30 minutes')) 
+    @php
+       $redcolor=1;
+    @endphp
+   
+   @else
+   @php
+       $redcolor=0;
+    @endphp
+   @endif 
+   <div class="col-6 p-0 m-0">
+     
+        @if($language === 'en')
+        <b> <a class="text-decoration-none  @if($redcolor == 1) text-danger @else text-dark @endif" href="/sales/{{ $transaction->omega_id }}">{{ strtoupper($transaction->name ) }} </a></b>
+        @else
+        <b> <a class="text-decoration-none @if($redcolor == 1) text-danger @else text-dark @endif" href="/sales/{{ $transaction->omega_id }}">{{ strtoupper($transaction->name_ar ) }} </a></b>
+        @endif
+       
       </div>
       <div class="col-2  p-0 m-0">
 
         <td>
           <!-- {{$transaction->last_eod}} -->
-          @if (date('Y-m-d', strtotime($transaction->last_eod)) != date('Y-m-d'))
+          {{-- @if (date('Y-m-d', strtotime($transaction->last_eod)) != date('Y-m-d'))
           <span class="badge text-bg-warning">
             {{\Carbon\Carbon::parse($transaction->last_eod)->format('D') }}
           </span>
@@ -94,6 +121,12 @@
           <span class="badge text-bg-info">
             {{\Carbon\Carbon::parse($transaction->last_eod)->format('D') }}
           </span>
+          @endif --}}
+
+          @if (date('Y-m-d', strtotime($transaction->last_eod)) != date('Y-m-d'))
+         <span class="badge text-bg-warning @if($redcolor == 1) text-danger @else text-dark @endif">  @if($language === 'en')  {{ \Carbon\Carbon::parse($transaction->last_eod)->format('D') }}  @else    {{ \Carbon\Carbon::parse($transaction->last_eod)->isoFormat('ddd') }} @endif</span>
+          @else
+          <span class="badge text-bg-info @if($redcolor == 1) text-danger @else text-dark @endif">  @if($language === 'en')  {{ \Carbon\Carbon::parse($transaction->last_eod)->format('D') }}  @else    {{ \Carbon\Carbon::parse($transaction->last_eod)->isoFormat('ddd') }} @endif</span>
           @endif
 
 
@@ -115,7 +148,7 @@
       <span style="color: {{ $arrowColor }}">KD<b> <a style="text-decoration:none; color: {{ $arrowColor }}"  href="/sales/{{ $transaction->omega_id }}"> {{ $transaction->total_paid }}</a></b>{{ $arrow }}</span>
       KD&nbsp;<span>{{$prevTotalPaid}}</span>
         @else
-        KD<b> <a class="text-decoration-none text-dark" href="/sales/{{ $transaction->omega_id }}"> {{ $transaction->total_paid }}</a></b>
+        <b> <a class="text-decoration-none @if($redcolor == 1) text-danger @else text-dark @endif" href="/sales/{{ $transaction->omega_id }}"> {{ $transaction->total_paid }} {{ __('translationFile.kd') }}</a></b>
         @endif
         @php
         session(['total_paid_' . $transaction->name => $transaction->total_paid]);

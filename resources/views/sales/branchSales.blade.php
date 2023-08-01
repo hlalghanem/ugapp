@@ -131,7 +131,7 @@ to {
           <div class="col-4">
             @if (strtotime($branchinfo->last_sync) < strtotime('-30 minutes')) 
                
-            <span class="badge bg-danger">Offline</span>
+            <span class="badge bg-danger">{{ __('translationFile.offline') }}</span>
                
                 @endif 
          

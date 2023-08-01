@@ -27,18 +27,25 @@ class SalesController extends Controller
     }
     public function live_sales()
     {
-        $user = Auth::user(); // get the authenticated user
-        $user_id = $user->id;
-        $activeBranches = DB::table('branches')
-            ->where('is_active', 1)
-            ->pluck('id');
-        $user_active_branches = DB::table('branch_user')
-            ->where('user_id', $user_id)
-            ->whereIn('branch_id', $activeBranches)
-            ->where('is_active', 1)
-            ->get();
-            $branchIds = $user_active_branches->pluck('branch_id'); // get the IDs of the user's active branches
+        // $user = Auth::user(); // get the authenticated user
+        // $user_id = $user->id;
+        // $activeBranches = DB::table('branches')
+        //     ->where('is_active', 1)
+        //     ->pluck('id');
+        // $user_active_branches = DB::table('branch_user')
+        //     ->where('user_id', $user_id)
+        //     ->whereIn('branch_id', $activeBranches)
+        //     ->where('is_active', 1)
+        //     ->get();
+        //     $branchIds = $user_active_branches->pluck('branch_id'); // get the IDs of the user's active branches
     //    $branchCount = $user_active_branches->count(); // get the count of the user's active branches
+    $user = Auth::user(); // get the authenticated user
+    $user_id = $user->id;
+   
+    $user_active_branches = DB::table('branch_user')
+        ->where('user_id', $user_id)
+        ->where('is_active', 1)
+        ->pluck('branch_id');
        if ($user_active_branches->count() === 1) {
         $omega_id = DB::table('branches')
             ->select('omega_id')
@@ -49,16 +56,25 @@ class SalesController extends Controller
         return redirect()->route('showBranchSales', ['omega_id' => $omega_id->omega_id]);
     }
        
-        $customerIds = $branchIds;
-        $transactions = DB::table('branches AS A')
-                    ->leftJoin('transactions AS B', 'B.branch_id', '=', 'A.id')
-                    ->groupBy('A.name', 'A.last_eod','A.omega_id')
-                    ->select('A.name', 'A.last_eod','A.omega_id', DB::raw('COALESCE(SUM(B.amount_paid), 0) AS total_paid'))
-                    ->whereIn('A.id', $customerIds)
-                    // ->where('A.last_eod','=','B.eod_date')
-                    ->orderBy('A.last_eod', 'desc')
-                    ->orderBy('total_paid', 'desc')
-                    ->get();
+        // $customerIds = $branchIds;
+        // $transactions = DB::table('branches AS A')
+        //             ->leftJoin('transactions AS B', 'B.branch_id', '=', 'A.id')
+        //             ->groupBy('A.name', 'A.last_eod','A.omega_id')
+        //             ->select('A.name', 'A.last_eod','A.omega_id', DB::raw('COALESCE(SUM(B.amount_paid), 0) AS total_paid'))
+        //             ->whereIn('A.id', $customerIds)
+        //             // ->where('A.last_eod','=','B.eod_date')
+        //             ->orderBy('A.last_eod', 'desc')
+        //             ->orderBy('total_paid', 'desc')
+        //             ->get();
+      
+        $transactions = Branch::select('branches.id', 'branches.name', 'branches.name_ar', 'branches.omega_id', 'branches.last_eod', 'branches.last_sync',  \DB::raw('COALESCE(SUM(transactions.amount_paid), 0) as total_paid'))
+        ->leftJoin('transactions', 'branches.id', '=', 'transactions.branch_id')
+        ->whereIn('branches.id', $user_active_branches)
+        ->groupBy('branches.id', 'branches.name', 'branches.name_ar', 'branches.omega_id', 'branches.last_eod', 'branches.last_sync')
+        ->orderByDesc('branches.last_eod')
+        ->orderByDesc('total_paid')
+        ->get();
+    //   dd($transactions);
         
         return view('sales.livesales', ['transactions' => $transactions]);
     }

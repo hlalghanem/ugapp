@@ -98,7 +98,7 @@
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/reports/salesbydate">  {{ __('translationFile.rep_Sales_By_Payment') }}</a></li>
                     <li><a class="dropdown-item" href="/reports/salessummary">  {{ __('translationFile.rep_Sales_Summary') }}</a></li>
-                   
+                    <li><a class="dropdown-item" href="/reports/completereport">  {{ __('translationFile.complete_report') }}</a></li>
                   </ul>
                 </li>
               

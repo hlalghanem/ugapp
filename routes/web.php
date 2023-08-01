@@ -42,7 +42,7 @@ Route::put('/updateMyActiveBranches/{branchid}/{value}',[Branch_Users_Controller
 // Reports Routes
 Route::get('/reports/salesbydate', [ReportsController::class, 'sales_report_by_date'])->middleware(['auth', 'verified'])->name('reports.bydate');
 Route::get('/reports/salessummary', [ReportsController::class, 'sales_report_summary'])->middleware(['auth', 'verified'])->name('reports.salessummary');
-
+Route::get('/reports/completereport', [ReportsController::class, 'completereport'])->middleware(['auth', 'verified'])->name('reports.completereport');
 //Users
 Route::get('/users', [UsersController::class, 'showUsers'])->middleware(['auth', 'verified'])->name('users.showUsers');
 Route::get('/users/setLanguageAr', [UsersController::class, 'setLanguageAr'])->middleware(['auth', 'verified'])->name('users.setLanguageAr');
