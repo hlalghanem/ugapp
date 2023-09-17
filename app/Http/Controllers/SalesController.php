@@ -27,18 +27,7 @@ class SalesController extends Controller
     }
     public function live_sales()
     {
-        // $user = Auth::user(); // get the authenticated user
-        // $user_id = $user->id;
-        // $activeBranches = DB::table('branches')
-        //     ->where('is_active', 1)
-        //     ->pluck('id');
-        // $user_active_branches = DB::table('branch_user')
-        //     ->where('user_id', $user_id)
-        //     ->whereIn('branch_id', $activeBranches)
-        //     ->where('is_active', 1)
-        //     ->get();
-        //     $branchIds = $user_active_branches->pluck('branch_id'); // get the IDs of the user's active branches
-    //    $branchCount = $user_active_branches->count(); // get the count of the user's active branches
+        
     $user = Auth::user(); // get the authenticated user
     $user_id = $user->id;
    
@@ -47,6 +36,16 @@ class SalesController extends Controller
         ->where('is_active', 1)
         ->pluck('branch_id');
        if ($user_active_branches->count() === 1) {
+         $activeBranches = DB::table('branches')
+            ->where('is_active', 1)
+            ->pluck('id');
+        $user_active_branches = DB::table('branch_user')
+            ->where('user_id', $user_id)
+            ->whereIn('branch_id', $activeBranches)
+            ->where('is_active', 1)
+            ->get();
+
+
         $omega_id = DB::table('branches')
             ->select('omega_id')
             ->where('id', $user_active_branches->pluck('branch_id'))
@@ -56,16 +55,7 @@ class SalesController extends Controller
         return redirect()->route('showBranchSales', ['omega_id' => $omega_id->omega_id]);
     }
        
-        // $customerIds = $branchIds;
-        // $transactions = DB::table('branches AS A')
-        //             ->leftJoin('transactions AS B', 'B.branch_id', '=', 'A.id')
-        //             ->groupBy('A.name', 'A.last_eod','A.omega_id')
-        //             ->select('A.name', 'A.last_eod','A.omega_id', DB::raw('COALESCE(SUM(B.amount_paid), 0) AS total_paid'))
-        //             ->whereIn('A.id', $customerIds)
-        //             // ->where('A.last_eod','=','B.eod_date')
-        //             ->orderBy('A.last_eod', 'desc')
-        //             ->orderBy('total_paid', 'desc')
-        //             ->get();
+      
       
         $transactions = Branch::select('branches.id', 'branches.name', 'branches.name_ar', 'branches.omega_id', 'branches.last_eod', 'branches.last_sync',  \DB::raw('COALESCE(SUM(transactions.amount_paid), 0) as total_paid'))
         ->leftJoin('transactions', 'branches.id', '=', 'transactions.branch_id')
@@ -210,15 +200,20 @@ class SalesController extends Controller
             ->where('omega_id', '=', $omega_id)
             ->where('closed', '=', -1)
             ->first();
-            $refund = TempSale::selectRaw('SUM(total) as refund')
+            // $refund = TempSale::selectRaw('SUM(total) as refund')
+            // ->where('omega_id', '=', $omega_id)
+            // ->where('total', '<', 0)
+            // ->where('closed', '=', -1)
+            // ->first();
+            $refund = Transaction::selectRaw('SUM(amount_paid) as refund')
             ->where('omega_id', '=', $omega_id)
-            ->where('total', '<', 0)
-            ->where('closed', '=', -1)
+            ->where('amount_paid', '<', 0)
             ->first();
             
             $menu = TempSale::selectRaw('menu, SUM(total) as total_menu')
             ->where('omega_id', '=', $omega_id)
             ->where('closed', '=', -1)
+            ->where('custnb', '<>', 0)
             ->groupBy('menu')
             
             ->orderBy('total_menu', 'desc')
@@ -227,6 +222,7 @@ class SalesController extends Controller
             $employee = TempSale::selectRaw('employee, SUM(total) as total_employee')
             ->where('omega_id', '=', $omega_id)
             ->where('closed', '=', -1)
+            ->where('custnb', '<>', 0)
             ->groupBy('employee')
             
             ->orderBy('total_employee', 'desc')
@@ -271,53 +267,62 @@ class SalesController extends Controller
         ->first();
 
          $branchinfo =Branch::where('omega_id', '=', $omega_id)->first();
-         
-
         $totals = Payment::selectRaw('payment_type, SUM(amount_paid) as total_amount')
-            ->where('omega_id', '=', $omega_id)
-            ->where('eod_date', '=', $eod_date)
-            ->groupBy('payment_type')
-            
-            ->orderBy('total_amount', 'desc')
-            ->get();
+        ->where('omega_id', '=', $omega_id)
+        ->where('eod_date', '=', $eod_date)
+        ->groupBy('payment_type')
+        ->orderBy('total_amount', 'desc')
+        ->get();
+        $discount = Sale::selectRaw('SUM(discount) as discount')
+        ->where('omega_id', '=', $omega_id)
+          ->where('closed', '=', -1)
+          ->where('eoddate', '=', $eod_date)
+          ->first();
+          $refund = Sale::selectRaw('SUM(total) as refund')
+          ->where('omega_id', '=', $omega_id)
+          ->where('total', '<', 0)
+          ->where('eoddate', '=', $eod_date)
+          ->where('closed', '=', -1)
+          ->first();
+
+          $refund_beforeDisc = Sale::selectRaw('SUM(amount) as refund')
+          ->where('omega_id', '=', $omega_id)
+          ->where('total', '<', 0)
+          ->where('eoddate', '=', $eod_date)
+          ->where('closed', '=', -1)
+          ->first();
+          $voidswithRefund = VoidRefund::selectRaw('SUM(totalprice) as voids')
+          ->where('omega_id', '=', $omega_id)
+          ->where('totalprice', '<', 0)
+          ->where('eoddate', '=', $eod_date)
+        //   ->where('invoicenumber', '<', 20000000)
+          ->first();
+          $refundAmount = $refund_beforeDisc->refund; // Get refund amount or default to 0 if null
+          $voidsAmount = $voidswithRefund->voids;       // Get voids amount or default to 0 if null
+          
+          $voids = $voidsAmount - $refundAmount;
+      // dd( $voidsAmount);
+          
+          $menu = Sale::selectRaw('menu, SUM(total) as total_menu')
+          ->where('omega_id', '=', $omega_id)
+          ->where('closed', '=', -1)
+          ->where('eoddate', '=', $eod_date)
+          ->groupBy('menu')
+          
+          ->orderBy('total_menu', 'desc')
+          ->get();
+
+          $employee = Sale::selectRaw('employee, SUM(total) as total_employee')
+          ->where('omega_id', '=', $omega_id)
+          ->where('closed', '=', -1)
+          ->where('eoddate', '=', $eod_date)
+          ->groupBy('employee')
+          
+          ->orderBy('total_employee', 'desc')
+          ->get();
 
 
-         
-            $discount = Sale::selectRaw('SUM(discount) as discount')
-            ->where('omega_id', '=', $omega_id)
-            ->where('closed', '=', -1)
-            ->where('eoddate', '=', $eod_date)
-            ->first();
-            $refund = Sale::selectRaw('SUM(total) as refund')
-            ->where('omega_id', '=', $omega_id)
-            ->where('total', '<', 0)
-            ->where('eoddate', '=', $eod_date)
-            ->where('closed', '=', -1)
-            ->first();
-            $voids = VoidRefund::selectRaw('SUM(totalprice) as voids')
-            ->where('omega_id', '=', $omega_id)
-            ->where('totalprice', '<', 0)
-            ->where('eoddate', '=', $eod_date)
-            ->where('invoicenumber', '<', 20000000)
-            ->first();
-            
-            $menu = Sale::selectRaw('menu, SUM(total) as total_menu')
-            ->where('omega_id', '=', $omega_id)
-            ->where('closed', '=', -1)
-            ->where('eoddate', '=', $eod_date)
-            ->groupBy('menu')
-            
-            ->orderBy('total_menu', 'desc')
-            ->get();
 
-            $employee = Sale::selectRaw('employee, SUM(total) as total_employee')
-            ->where('omega_id', '=', $omega_id)
-            ->where('closed', '=', -1)
-            ->where('eoddate', '=', $eod_date)
-            ->groupBy('employee')
-            
-            ->orderBy('total_employee', 'desc')
-            ->get();
 
            
 

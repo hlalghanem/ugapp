@@ -2,17 +2,17 @@
 @section('content')
 
 <div class="text-center">
-    <a class="btn btn-secondary mb-1" href="/users">Refresh</a>
+    <a class="btn btn-secondary mb-1" href="/users" onclick="showMessage()">Refresh</a>
 </div>
-
+<div id="messageDiv"  class="text-center text-success"></div>
 <table class="table table-striped table-responsive">
     <tbody>
 @foreach ($users as $usr)
 
     
-    <tr>
+    <tr >
         <td>
-            <b>{{ $usr->name }}</b></td>
+            <b>{{ $usr->name }}  </b>{{ $usr->company }}</td>
         <td>{{ $usr->email }}</td>
        <td></td>
     </tr>
@@ -27,8 +27,12 @@
 </tbody>
 </table>
    
-
-
+<script>
+    function showMessage() {
+        var messageDiv = document.getElementById("messageDiv");
+        messageDiv.innerHTML = "Page is refreshed!";
+    }
+</script>
 
 
 

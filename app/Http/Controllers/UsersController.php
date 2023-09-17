@@ -8,6 +8,7 @@ use App\Models\Branch;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -24,6 +25,18 @@ class UsersController extends Controller
         }
         $users = User::orderBy('last_login', 'desc')->get();
         return view('admin_views.users', ['users' => $users])->with('success','Record added Successfully');
+    }
+   
+    public function resetpassword(Request $request,$id)
+    {
+        $newpassword=123456;
+        $user= User::find($id);
+        $user->password =Hash::make($newpassword);
+        $user->save();
+        session()->flash('success', 'Reset Password is done');
+
+    // Redirect back to the previous page
+    return redirect()->back();
     }
     public function userUpdate(Request $request,$id)
     {

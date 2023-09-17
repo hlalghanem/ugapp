@@ -5,6 +5,10 @@ use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\Branch;
 use App\Models\User;
+use App\Models\VoidRefund;
+use App\Models\Transaction;
+use App\Models\TempSale;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -74,12 +78,37 @@ class BranchesController extends Controller
 
        
     }
-    
+    public function deleteBranchTransactions($id, Request $request)
+    {
+       
+
+       $deletedRowsPayments = Payment::where('branch_id', $id)      
+       ->delete();
+
+       $deletedRowsSales = Sale::where('branch_id', $id)
+       ->delete();
+
+       $deletedVoidsRefunds = VoidRefund::where('branch_id', $id)
+       ->delete();
+
+       $deletedTrans = Transaction::where('branch_id', $id)
+       ->delete();
+       $deletedTemp = TempSale::where('branch_id', $id)
+       ->delete();
+
+
+    //    return redirect()->back()->with('message','Record added Successfully');
+      return redirect()->back()->with('success',$deletedTrans .' Transactions<br>' .$deletedTemp .' Temp Sales<br>' . $deletedRowsPayments .' Payments<br>' . $deletedRowsSales .' Sales Details<br>' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.');
+        
+           
+       
+    }
     public function deletepayments($id, Request $request)
     {
         
        $startDate= $request->input('start_date');
        $endDate= $request->input('end_date');
+
        $deletedRowsPayments = Payment::where('branch_id', $id)
        ->whereBetween('eod_date', [$startDate, $endDate])
        ->delete();
@@ -88,9 +117,13 @@ class BranchesController extends Controller
        ->whereBetween('eoddate', [$startDate, $endDate])
        ->delete();
 
+       $deletedVoidsRefunds = VoidRefund::where('branch_id', $id)
+       ->whereBetween('eoddate', [$startDate, $endDate])
+       ->delete();
+
 
     //    return redirect()->back()->with('message','Record added Successfully');
-      return redirect()->back()->with('success', $deletedRowsPayments .' Payments and ' . $deletedRowsSales .' Sales Details records deleted successfully.');
+      return redirect()->back()->with('success', $deletedRowsPayments .' Payments and ' . $deletedRowsSales .' Sales Details records deleted successfully.' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.');
         
            
        
@@ -145,7 +178,7 @@ class BranchesController extends Controller
         $branch->send_sales_details = $request->has('send_sales_details') ? 1 : 0;
         $branch->save();
 
-        return redirect()->route('get_all_branches')->with('success', 'Branch updated successfully!');
+        return redirect()->back()->with('success', 'Branch updated successfully!');
 
 
     }

@@ -83,6 +83,7 @@
 
 </form>
 
+
 <table class="table">
 
     <tbody>
@@ -106,5 +107,15 @@
         @endforeach
     </tbody>
 </table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<form method="POST" action="{{ route('user.resetpassword',$user->id) }}">
+    @csrf
+    @method('PUT')
+    <button type="submit" class="btn btn-outline-danger m-2">Reset Password</button>
 
+</form>
 @endsection

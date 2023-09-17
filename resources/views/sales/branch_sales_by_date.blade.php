@@ -110,12 +110,12 @@
             </table>
           </div>
            
-        @if ($voids->voids <0)
+        @if ($voids<0)
         <div class="card border-danger mb-1">
           <div class="card-body">
             <div class="row text-danger">
               <div class="col-8">
-                {{ __('translationFile.voids_total') }}{{ $voids->voids }}
+                {{ __('translationFile.voids_total') }}{{number_format($voids, 3) }}
               </div>
               <div class="col-4 @if($language === 'en') text-end @else text-start @endif">
             <i class="bi bi-exclamation"  style="font-size:26px;"></i>

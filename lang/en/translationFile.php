@@ -32,6 +32,8 @@ return [
     'complete_report' => 'Complete report',
     'brnach_name' => 'Branch',
     'offline' => 'Offline',
+    'summarybyday' => 'Summary by Day',
+    'day' => 'Day',
 
 
 

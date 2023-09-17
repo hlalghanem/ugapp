@@ -31,6 +31,8 @@ return [
     'complete_report' => 'تقرير تفصيلي',
     'brnach_name' => 'الفرع',
     'offline' => 'غير متصل',
+    'summarybyday' => 'ملخص المبيعات باليوم',
+    'day' => 'اليوم',
 
 
 ];

@@ -12,7 +12,7 @@
 @endif
 @if (session('success'))
 <div class="alert alert-success">
-    {{ session('success') }}
+    {!! session('success') !!}
 </div>
 @endif
 
@@ -130,7 +130,17 @@ Delete Payments:
       <label for="end_date" class="form-label">End Date</label>
       <input type="date" class="form-control" id="end_date" name="end_date" value="{{ date('Y-m-d') }}">
     
-    <button type="submit" class="btn btn-outline-danger">Delete</button>
+    <button type="submit" class="btn btn-outline-danger mt-2">Delete</button>
+   
+  </form>
+<br>
+<br>
+<br>
+
+<form method="POST" action="{{ route('branches.deletealltrans', ['id' => $branch->id]) }}">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-outline-danger">Delete all Transactions</button>
    
   </form>
 

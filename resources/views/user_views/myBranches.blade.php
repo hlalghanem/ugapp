@@ -44,7 +44,7 @@
                 <form method="POST" action="{{ route('updateMyActiveBranches', ['branchid' => $branch->id, 'value' => '0']) }}">
                     @csrf
                     @method('put')
-                    <button type="submit" title="Update" class="btn btn-outline-danger btn-sm "><i class="bi bi-toggle2-off"></i></button>
+                    <button type="submit" title="Update" class="btn btn-outline-danger btn-sm "><i class="bi bi-toggle2-on"></i></button>
                 </form>
             </td>
             @else
@@ -53,7 +53,7 @@
                 <form method="POST" action="{{ route('updateMyActiveBranches', ['branchid' => $branch->id, 'value' => '1']) }}">
                     @csrf
                     @method('put')
-                    <button type="submit" title="Update" class="btn btn-outline-success btn-sm "><i class="bi bi-toggle2-on"></i></button>
+                    <button type="submit" title="Update" class="btn btn-outline-success btn-sm "><i class="bi bi-toggle2-off"></i></button>
                 </form>
             </td>
             @endif
