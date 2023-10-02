@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\Branch;
+use App\Models\Salesbyitemhistory;
 use App\Models\User;
 use App\Models\VoidRefund;
 use App\Models\Transaction;
@@ -95,10 +96,12 @@ class BranchesController extends Controller
        ->delete();
        $deletedTemp = TempSale::where('branch_id', $id)
        ->delete();
+       $deletedSalesbyItem = Salesbyitemhistory::where('branch_id', $id)
+       ->delete();
 
 
     //    return redirect()->back()->with('message','Record added Successfully');
-      return redirect()->back()->with('success',$deletedTrans .' Transactions<br>' .$deletedTemp .' Temp Sales<br>' . $deletedRowsPayments .' Payments<br>' . $deletedRowsSales .' Sales Details<br>' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.');
+      return redirect()->back()->with('success',$deletedTrans .' Transactions<br>' .$deletedTemp .' Temp Sales<br>' . $deletedRowsPayments .' Payments<br>' . $deletedRowsSales .' Sales Details<br>' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.<br>'. $deletedSalesbyItem .' Sales By Item<br>');
         
            
        
@@ -121,9 +124,13 @@ class BranchesController extends Controller
        ->whereBetween('eoddate', [$startDate, $endDate])
        ->delete();
 
+       $deletedSalesbyitemHistory = Salesbyitemhistory::where('branch_id', $id)
+       ->whereBetween('eoddate', [$startDate, $endDate])
+       ->delete();
+
 
     //    return redirect()->back()->with('message','Record added Successfully');
-      return redirect()->back()->with('success', $deletedRowsPayments .' Payments and ' . $deletedRowsSales .' Sales Details records deleted successfully.' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.');
+      return redirect()->back()->with('success', $deletedRowsPayments .' Payments and ' . $deletedRowsSales .' Sales Details records deleted successfully.' . $deletedVoidsRefunds .' Voids&refunds records deleted successfully.'. $deletedSalesbyitemHistory .' Sales by item History records deleted successfully.');
         
            
        
@@ -142,7 +149,7 @@ class BranchesController extends Controller
             ->where('branch_user.branch_id', '=', $id)
             ->get();
 
-        $users_not_assigned = User::select('users.id', 'users.name')
+        $users_not_assigned = User::select('users.id', 'users.name','users.company')
             ->whereNotIn('id', $users->pluck('id'))
             ->orderBy('name')
             ->get();
@@ -176,6 +183,7 @@ class BranchesController extends Controller
         $branch->is_active = $request->has('is_active') ? 1 : 0;
         $branch->send_payments = $request->has('send_payments') ? 1 : 0;
         $branch->send_sales_details = $request->has('send_sales_details') ? 1 : 0;
+        $branch->sendsalesbyitem = $request->has('sendsalesbyitem') ? 1 : 0;
         $branch->save();
 
         return redirect()->back()->with('success', 'Branch updated successfully!');

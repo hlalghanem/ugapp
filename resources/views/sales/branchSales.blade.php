@@ -311,6 +311,8 @@ to {
           <b>  {{ __('translationFile.sales_By_Employee') }} ▼</b>
         </a>
       </div>
+      @if ((count($employee)>0))
+        
       <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
         <div class="card-body">
           <table class="table">
@@ -328,6 +330,8 @@ to {
           </table>
         </div>
       </div>
+        
+      @endif
     </div>
     
     @else
@@ -348,6 +352,45 @@ to {
   </div>
    
     @endif
+    {{-- top items --}}
+    @if (count($topitems)>0)
+    <div class="card mb-1">
+      <div class="card-header">
+        <a class="collapsed btn" data-bs-toggle="collapse" href="#collapsetopitems">
+          <b> {{ __('translationFile.topitems') }} ▼</b>
+      </a>
+      </div>
+      <div id="collapsetopitems" class="collapse" data-bs-parent="#accordion">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+              <th>{{ __('translationFile.itemdesc') }}</th>
+              <th>KD</th>
+              <th>#</th>
+            </tr>
+            </thead>
+      
+            <tbody>
+            
+              @foreach ($topitems as $item)
+              <tr>
+                <td>{{ $item->item_desc }}</td>
+                <td>KD {{ $item->totalprice }}</td>
+                <td>{{ $item->count }}</td>
+               
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+      
+    @endif
+
+
+    {{--end top items --}}
 
 
   @if(count($totalsbyDate)>0)
@@ -362,6 +405,7 @@ to {
       {{ __('translationFile.last_5_days') }}
       <div class="table-responsive">
         <table class="table">
+          
           <tbody>
             @foreach ($totalsbyDate as $total)
             <tr>
@@ -394,11 +438,25 @@ to {
   </div>
 </div>
     @endif
-
   </div>
-<br><br>
-  <p>Last Sync. : {{ \Carbon\Carbon::parse($branchinfo->last_sync)->format('j-M H:i ')}}</p>
- <p> Last Transaction : {{ \Carbon\Carbon::parse($branchinfo->last_transaction)->format('j-M H:i')}}</p>
+    {{-- Other info --}}
+    <div class="card mb-1">
+      <div class="card-header">
+        <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseotherinfo">
+          <b> {{ __('translationFile.otherinfo') }} ▼</b>
+      </a>
+      </div>
+      <div id="collapseotherinfo" class="collapse" data-bs-parent="#accordion">
+        <div class="card-body">
+          <p>Last Sync. : {{ \Carbon\Carbon::parse($branchinfo->last_sync)->format('j-M H:i ')}}</p>
+          <p> Last Transaction : {{ \Carbon\Carbon::parse($branchinfo->last_transaction)->format('j-M H:i')}}</p>
+        </div>
+      </div>
+    </div>
+      
+    {{-- end Other info --}}
+
+  
  <br>
  <br>
  

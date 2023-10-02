@@ -9,11 +9,14 @@ use App\Http\Controllers\UsersController;
 use App\http\Controllers\MyBranchesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyEnglishController;
+use App\Http\Controllers\StatisticsController;
 
 // My English Routes
 Route::get('/myenglishway/{student}',[MyEnglishController::class,'myenglishdataentry']);
 Route::post('/myenglishway/store',[MyEnglishController::class,'myenglishdatastore'])->name('myenglishdatastore');
 Route::delete('/myenglishway/delete/{id}',[MyEnglishController::class,'myenglishdatadelete'])->name('myenglishdatadelete');
+//Statistics
+Route::get('/statistics', [StatisticsController::class, 'statistics'])->middleware(['auth', 'verified'])->name('statistics');
 
 // Sales Routes
 Route::get('/', [SalesController::class, 'live_sales'])->middleware(['auth', 'verified','updateLastLogin'])->name('live_sales');

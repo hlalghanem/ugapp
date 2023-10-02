@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Salesbyitem;
+use App\Models\Salesbyitemhistory;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\Transaction;
@@ -224,13 +226,21 @@ class SalesController extends Controller
             ->where('closed', '=', -1)
             ->where('custnb', '<>', 0)
             ->groupBy('employee')
-            
             ->orderBy('total_employee', 'desc')
+            ->get();
+
+            $topitems = Salesbyitem::selectRaw('item_desc, SUM(totalprice) as totalprice,SUM(qty) as count')
+            ->where('omega_id', '=', $omega_id)
+            ->groupBy('item_desc')
+            ->orderBy('totalprice', 'desc')
+            ->take(15)
             ->get();
 
            
 
-        return view('sales.branchSales', ['employee' => $employee,'menu' => $menu,'refund' => $refund,'discount' => $discount,'open_orders' => $open_orders,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales]);
+           
+
+        return view('sales.branchSales', ['employee' => $employee,'menu' => $menu,'refund' => $refund,'discount' => $discount,'open_orders' => $open_orders,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal, 'totalsbyDate' => $totalsbyDate , 'prevSales' => $prevSales , 'topitems' => $topitems]);
 
     }
 
@@ -321,12 +331,30 @@ class SalesController extends Controller
           ->orderBy('total_employee', 'desc')
           ->get();
 
+          $topitems = Salesbyitemhistory::selectRaw('item_desc, SUM(totalprice) as totalprice,SUM(qty) as count')
+            ->where('omega_id', '=', $omega_id)
+            ->where('eoddate', '=', $eod_date)
+            ->groupBy('item_desc')
+            ->orderBy('totalprice', 'desc')
+            ->take(15)
+            ->get();
+
 
 
 
            
 
-        return view('sales.branch_sales_by_date', ['voids' => $voids,'employee' => $employee,'menu' => $menu,'refund' => $refund,'discount' => $discount,'branchinfo' => $branchinfo,'totals' => $totals, 'brTodayTotal' => $brTodayTotal]);
+        return view('sales.branch_sales_by_date', [
+            'voids' => $voids,
+            'employee' => $employee,
+            'menu' => $menu,
+            'refund' => $refund,
+            'discount' => $discount,
+            'branchinfo' => $branchinfo,
+            'totals' => $totals,
+            'brTodayTotal' => $brTodayTotal,
+            'topitems' => $topitems,
+            ]);
 
 
 

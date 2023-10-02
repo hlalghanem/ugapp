@@ -59,6 +59,13 @@
             send_sales_details
         </label>
       </div>
+      <br>
+      <div class="form-check">
+        <input class="form-check-input p-2" name="sendsalesbyitem" type="checkbox" id="sendsalesbyitem" {{ ($branch->sendsalesbyitem==1 ?  ' checked' : '') }}>
+        <label class="form-check-label" for="sendsalesbyitem">
+            send sales by item /<i> Take data base size</i>
+        </label>
+      </div>
     {{-- <div>
         <label class="form-label" for="is_active">is_active</label>
         <input type="checkbox" name="is_active" id="is_active" {{ ($branch->is_active==1 ?  ' checked' : '') }}>
@@ -76,7 +83,7 @@
         <label class="form-label" for="user_id">Select User:</label>
         <select class="btn btn-outline-secondary m-2" name="user_id" id="user_id">
             @foreach ($users_not_assigned as $nuser)
-            <option value="{{ $nuser->id }}">{{ $nuser->name }}</option>
+            <option value="{{ $nuser->id }}">{{ $nuser->name }}-{{ $nuser->company }}</option>
             @endforeach
         </select>
 

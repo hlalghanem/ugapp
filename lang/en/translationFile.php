@@ -34,6 +34,9 @@ return [
     'offline' => 'Offline',
     'summarybyday' => 'Summary by Day',
     'day' => 'Day',
+    'topitems' => 'Top Items',
+    'otherinfo' => 'Other info',
+    'itemdesc' => 'Item',
 
 
 

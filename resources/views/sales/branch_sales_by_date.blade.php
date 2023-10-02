@@ -207,6 +207,45 @@
         </div>
       </div>
     </div>
+    {{-- top items --}}
+    @if (count($topitems)>0)
+    <div class="card mb-1">
+      <div class="card-header">
+        <a class="collapsed btn" data-bs-toggle="collapse" href="#collapsetopitems">
+          <b> {{ __('translationFile.topitems') }} ▼</b>
+      </a>
+      </div>
+      <div id="collapsetopitems" class="collapse" data-bs-parent="#accordion">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+              <th>{{ __('translationFile.itemdesc') }}</th>
+              <th>KD</th>
+              <th>#</th>
+            </tr>
+            </thead>
+      
+            <tbody>
+            
+              @foreach ($topitems as $item)
+              <tr>
+                <td>{{ $item->item_desc }}</td>
+                <td>KD {{ $item->totalprice }}</td>
+                <td>{{ $item->count }}</td>
+               
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+      
+    @endif
+
+
+    {{--end top items --}}
     
     @else
     <div class="card mb-1">

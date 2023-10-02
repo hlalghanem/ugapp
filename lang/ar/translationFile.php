@@ -33,6 +33,9 @@ return [
     'offline' => 'غير متصل',
     'summarybyday' => 'ملخص المبيعات باليوم',
     'day' => 'اليوم',
+    'topitems' => 'الأعلى مبيعا"',
+    'otherinfo' => 'معلومات',
+    'itemdesc' => 'الصنف',
 
 
 ];
